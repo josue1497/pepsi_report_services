@@ -20,7 +20,7 @@
                   <img alt="Image placeholder" src="img/theme/team-4-800x800.jpg">
                 </span>
                         <div class="media-body ml-2 d-none d-lg-block">
-                            <span class="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
+                            <span class="mb-0 text-sm  font-weight-bold">{{ user.name }}</span>
                         </div>
                     </div>
 
@@ -45,10 +45,10 @@
                             <span>Support</span>
                         </router-link>
                         <div class="dropdown-divider"></div>
-                        <router-link to="/profile" class="dropdown-item">
+                        <a @click="userLogger" class="dropdown-item">
                             <i class="ni ni-user-run"></i>
                             <span>Logout</span>
-                        </router-link>
+                        </a>
                     </template>
                 </base-dropdown>
             </li>
@@ -56,7 +56,18 @@
     </base-nav>
 </template>
 <script>
+import { mapGetters, mapActions, mapState } from "vuex";
+import { mapMutations } from 'vuex';
+
   export default {
+    computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
+  },
     data() {
       return {
         activeNotifications: false,
@@ -65,6 +76,14 @@
       };
     },
     methods: {
+    ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
+    ...mapMutations('userData', ['LOGOUT_USER']),
+    userLogger(){
+      if(confirm('¿Esta seguro de querer abandonar el sistema?')){
+        this.LOGOUT_USER();
+        this.$router.push('/login');
+      }
+    },
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
       },

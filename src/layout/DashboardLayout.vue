@@ -6,7 +6,14 @@
       title="Argon"
     >
       <template slot="links">
-        <sidebar-item
+
+        <sidebar-item v-for="(link, i) in user_route" :key="i"
+        :link="{
+            name: link.text,
+            icon: link.icon + ' text-orange',
+            path: link.to
+          }"> </sidebar-item>
+        <!-- <sidebar-item
           :link="{
             name: 'Dashboard',
             icon: 'ni ni-tv-2 text-primary',
@@ -19,7 +26,7 @@
         <sidebar-item :link="{name: 'User Profile', icon: 'ni ni-single-02 text-yellow', path: '/profile'}"/>
         <sidebar-item :link="{name: 'Tables', icon: 'ni ni-bullet-list-67 text-red', path: '/tables'}"/>
         <sidebar-item :link="{name: 'Login', icon: 'ni ni-key-25 text-info', path: '/login'}"/>
-        <sidebar-item :link="{name: 'Register', icon: 'ni ni-circle-08 text-pink', path: '/register'}"/>
+        <sidebar-item :link="{name: 'Register', icon: 'ni ni-circle-08 text-pink', path: '/register'}"/> -->
 
       </template>
     </side-bar>
@@ -40,6 +47,8 @@
   import DashboardNavbar from './DashboardNavbar.vue';
   import ContentFooter from './ContentFooter.vue';
   import { FadeTransition } from 'vue2-transitions';
+  import { mapState } from "vuex";
+
 
   export default {
     components: {
@@ -47,9 +56,17 @@
       ContentFooter,
       FadeTransition
     },
+    computed:{
+      ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
+    },
     data() {
       return {
-        sidebarBackground: 'vue' //vue|blue|orange|green|red|primary
+        sidebarBackground: 'blue' //vue|blue|orange|green|red|primary
       };
     },
     methods: {

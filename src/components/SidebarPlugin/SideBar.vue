@@ -7,7 +7,10 @@
                 <span class="navbar-toggler-icon"></span>
             </navbar-toggle-button>
             <router-link class="navbar-brand" to="/">
-                <img :src="logo" class="navbar-brand-img" alt="...">
+              <div class="d-flex w-100">
+                  <img :src="logo" class="navbar-brand-img justify-content-center align-items-center" alt="...">
+                  <!-- <span class="justify-content-center align-items-center">Pepsi CO</span> -->
+              </div>
             </router-link>
 
             <slot name="mobile-right">
@@ -82,8 +85,7 @@
                 <!--Divider-->
                 <hr class="my-3">
                 <!--Heading-->
-                <h6 class="navbar-heading text-muted">Documentation</h6>
-                <!--Navigation-->
+                <!-- <h6 class="navbar-heading text-muted">Documentation</h6>
                 <ul class="navbar-nav mb-md-3">
                     <li class="nav-item">
                         <a class="nav-link"
@@ -103,7 +105,7 @@
                             <i class="ni ni-ui-04"></i> Components
                         </a>
                     </li>
-                </ul>
+                </ul> -->
             </div>
             </div>
     </nav>
@@ -119,8 +121,8 @@
     props: {
       logo: {
         type: String,
-        default: 'img/brand/green.png',
-        description: 'Sidebar app logo'
+        default: 'img/brand/pepsi-h.png',
+        description: 'Logo'
       },
       autoClose: {
         type: Boolean,

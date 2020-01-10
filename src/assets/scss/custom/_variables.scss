@@ -35,7 +35,7 @@
 $enable-caret:              true !default;
 $enable-rounded:            true !default;
 $enable-shadows:            true !default;
-$enable-gradients:          false !default;
+$enable-gradients:          true !default;
 $enable-transitions:        true !default;
 $enable-grid-classes:       true !default;
 $enable-print-styles:       true !default;
@@ -78,6 +78,11 @@ $yellow:  #ffd600 !default;
 $green:   #2dce89 !default;
 $teal:    #11cdef !default;
 $cyan:    #2bffc6 !default;
+$pepsi-primary:   #005cb4 !default;
+$pepsi-secondary: #004b93 !default;
+$pepsi-tertiary:  #c9002b !default;
+
+
 
 $colors: () !default;
 $colors: map-merge((
@@ -95,7 +100,10 @@ $colors: map-merge((
   "gray":       $gray-600,
   "light":      $gray-400,
   "lighter":    $gray-200,
-  "gray-dark":  $gray-800
+  "gray-dark":  $gray-800,
+  "pepsi-primary":    $pepsi-primary,
+  "pepsi-secondary":    $pepsi-secondary,
+  "pepsi-tertiary":    $pepsi-tertiary,
 ), $colors);
 
 $default:       #172b4d !default;
@@ -131,7 +139,10 @@ $theme-colors: map-merge((
   "white":        $white,
   "neutral":      $white,
   "dark":         $dark,
-  "darker":       $darker
+  "darker":       $darker,
+  "pepsi-primary":    $pepsi-primary,
+  "pepsi-secondary":    $pepsi-secondary,
+  "pepsi-tertiary":    $pepsi-tertiary,
 ), $theme-colors);
 
 $brand-colors: () !default;
