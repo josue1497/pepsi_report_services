@@ -15,19 +15,23 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Vue from 'vue'
+import Vue from 'vue';
 
 // import { sync } from 'vuex-router-sync'
 
-import App from './App.vue'
-import router from './router/router'
-import './registerServiceWorker'
-import ArgonDashboard from './plugins/argon-dashboard'
-import store from '@/store'
+import App from './App.vue';
+import router from './router/router';
+import './registerServiceWorker';
+import ArgonDashboard from './plugins/argon-dashboard';
+import store from '@/store';
+import Toasted from 'vue-toasted';
 
-Vue.config.productionTip = false
 
-Vue.use(ArgonDashboard)
+Vue.config.productionTip = false;
+
+Vue.use(ArgonDashboard);
+Vue.use(Toasted);
+
 new Vue({
   router,
   store,

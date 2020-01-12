@@ -1,56 +1,76 @@
 <template>
   <div class="container">
-      <div class="d-flex">
+    <base-header type="pepsi-primary" class="pb-6 pb-8 pt-5 pt-md-8">
+      <div class="d-flex justify-content-center">
         <template>
-          <div class="content">
-            <div :class="`d-flex justify-center align-center m-3 `">
-              <input
-                type="file"
-                name="file-1[]"
-                id="file-1"
-                ref="filesUploads"
-                class="inputfile inputfile-1"
-                data-multiple-caption="{count} files selected"
-                multiple
-                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                @change="uploadFiles"
-              />
-              <label for="file-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
-                  <path
-                    d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"
-                  />
-                </svg>
-                <span>Seleccione sus Archivos&hellip;</span>
-              </label>
+          <card type="ligth" header-classes="bg-transparent text-black">
+            <div slot="header" class="row align-items-center">
+              <div class="col">
+                <h5 class="h3 text-black-50 mb-0">Importar Archivo.</h5>
+              </div>
             </div>
-          </div>
+            <div class="content">
+              <div :class="`d-flex justify-center align-center m-3 file-content`">
+                <input
+                  type="file"
+                  name="file"
+                  id="file-1"
+                  ref="filesUploads"
+                  class="inputfile inputfile-1"
+                  data-multiple-caption="{count} files selected"
+                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                  @change="xlsxLoad"
+                />
+                <label for="file-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="17"
+                    viewBox="0 0 20 17"
+                  >
+                    <path
+                      d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"
+                    />
+                  </svg>
+                  <span>Seleccione sus Archivos&hellip;</span>
+                </label>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-pepsi-primary" @click="upload">Cargar</button>
+            </div>
+          </card>
         </template>
       </div>
+    </base-header>
   </div>
 </template>
 <script>
 const XLSX = require("xlsx");
-import  imporService  from "./../../services/importServices";
+import imporService from "./../../services/importServices";
+import { mapState } from "vuex";
+var temp_seet;
+var temp_metadata;
 
 export default {
   data: () => ({
-    files: []
+    sheet_data: [],
+    document_name: "",
+    metadata: [],
   }),
+  computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
+  },
   methods: {
-    async uploadFiles() {
-      this.files = this.$refs.filesUploads.files;
-      let formData = new FormData();
-      formData.append("files", this.files);
-
-      let value = await this.callCenterReport(formData);
-
-
-    },
     callCenterReport(data) {
       return new Promise((resolve, reject) => {
         imporService
-          .callCenterReport(data)
+          .callCenterReport(data, this.access_token)
           .then(response => {
             console.log(response);
             resolve(response);
@@ -60,6 +80,42 @@ export default {
             reject(err);
           });
       });
+    },
+    async upload() {
+      console.log(temp_seet);
+      this.sheet_data = temp_seet;
+      this.metadata = temp_metadata;
+
+      let response = await this.callCenterReport({
+        sheet_data: this.sheet_data,
+        document_name: this.document_name,
+        metadata: this.metadata
+      });
+
+      this.$toasted.show(response.message+": "+response.rows+" Importados.", {
+        theme: "bubble",
+        position: "top-right",
+        duration: 5000
+      });
+    },
+    async xlsxLoad(e) {
+      var files = e.target.files,
+        f = files[0];
+
+      this.document_name = files[0].name;
+      var reader = new FileReader();
+      reader.onload = function loadData(e) {
+        var data = new Uint8Array(e.target.result);
+        var workbook = XLSX.read(data, { type: "array" });
+        let sheetName = workbook.SheetNames[0];
+        /* DO SOMETHING WITH workbook HERE */
+        console.log(workbook);
+        let worksheet = workbook.Sheets[sheetName];
+        temp_seet = XLSX.utils.sheet_to_json(worksheet);
+        console.log(temp_seet);
+        temp_metadata = workbook;
+      };
+      reader.readAsArrayBuffer(f);
     }
   }
 };
@@ -75,10 +131,13 @@ export default {
   position: absolute;
   z-index: -1;
 }
+.file-content:hover {
+  box-shadow: #000 10px;
+}
 
 .inputfile + label {
-  max-width: 80%;
-  font-size: 3rem;
+  max-width: 100%;
+  font-size: 1.5rem;
   /* 20px */
   font-weight: 700;
   text-overflow: ellipsis;
@@ -117,13 +176,7 @@ export default {
 /* style 1 */
 
 .inputfile-1 + label {
-  color: #f1e5e6;
+  color: #221b1c;
   // background-color: $brand-primary;
-}
-
-.inputfile-1:focus + label,
-.inputfile-1.has-focus + label,
-.inputfile-1 + label:hover {
-  // background-color: $brand-secondary;
 }
 </style>

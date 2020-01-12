@@ -112,13 +112,18 @@ const router = new Router({
         },
         {
           path: 'reports',
-          name: 'Importador de Atencion al cliente',
+          name: 'Reportes avanzados',
           component: () => import('./../views/admin/Reports.vue'), meta: { requiresAuth: true }
         },
         {
           path: 'reports/call-center',
           name: 'Reporte de Call Center por Usuario',
           component: () => import('./../views/reports/ReportCallCenter.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/kit-details',
+          name: 'Reporte de Detalle de Equipos',
+          component: () => import('./../views/reports/KitDetailsReport.vue'), meta: { requiresAuth: true }
         },
         {
           path: 'config',

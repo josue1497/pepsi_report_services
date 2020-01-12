@@ -5,11 +5,11 @@
               expand>
         <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <div class="form-group mb-0">
-                <base-input placeholder="Search"
+                <!-- <base-input placeholder="Search"
                             class="input-group-alternative"
                             alternative=""
                             addon-right-icon="fas fa-search">
-                </base-input>
+                </base-input> -->
             </div>
         </form>
         <ul class="navbar-nav align-items-center d-none d-md-flex">
@@ -17,7 +17,7 @@
                 <base-dropdown class="nav-link pr-0">
                     <div class="media align-items-center" slot="title">
                 <span class="avatar avatar-sm rounded-circle">
-                  <img alt="Image placeholder" src="img/theme/team-4-800x800.jpg">
+                  <img alt="Image placeholder" src="https://i1.sndcdn.com/avatars-000231136476-pstlgc-t500x500.jpg">
                 </span>
                         <div class="media-body ml-2 d-none d-lg-block">
                             <span class="mb-0 text-sm  font-weight-bold">{{ user.name }}</span>
