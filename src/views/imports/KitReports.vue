@@ -37,7 +37,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-pepsi-primary" @click="upload">Cargar</button>
+              <button class="btn btn-pepsi-primary" @click="upload" id="uploadButton" disabled="true">Cargar</button>
             </div>
           </card>
         </template>
@@ -83,6 +83,7 @@ export default {
     },
     async upload() {
       this.sheet_data = temp_seet;
+       document.getElementById('uploadButton').disabled=true;
 
       this.paginateData = chunkArray(this.sheet_data, 50);
 
@@ -118,7 +119,7 @@ export default {
         console.log(workbook);
         let worksheet = workbook.Sheets[sheetName];
         temp_seet = XLSX.utils.sheet_to_json(worksheet);
-        // temp_pagination = chunkArray(temp_seet, 50);
+        document.getElementById('uploadButton').disabled=false;
       };
       reader.readAsArrayBuffer(f);
     }

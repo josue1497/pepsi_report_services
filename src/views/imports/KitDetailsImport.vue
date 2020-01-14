@@ -37,7 +37,12 @@
               </div>
             </div>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-pepsi-primary" @click="upload">Cargar</button>
+              <button
+                class="btn btn-pepsi-primary"
+                id="uploadButton"
+                disabled="true"
+                @click="upload"
+              >Cargar</button>
             </div>
           </card>
         </template>
@@ -50,13 +55,13 @@ const XLSX = require("xlsx");
 import imporService from "./../../services/importServices";
 import { mapState } from "vuex";
 var temp_seet;
-var temp_metadata;
+var temp_pagination;
 
 export default {
   data: () => ({
     sheet_data: [],
     document_name: "",
-    metadata: [],
+    paginateData: []
   }),
   computed: {
     ...mapState("userData", [
@@ -70,7 +75,7 @@ export default {
     callCenterReport(data) {
       return new Promise((resolve, reject) => {
         imporService
-          .callCenterReport(data, this.access_token)
+          .kitDetailReport(data, this.access_token)
           .then(response => {
             console.log(response);
             resolve(response);
@@ -82,21 +87,32 @@ export default {
       });
     },
     async upload() {
-      console.log(temp_seet);
       this.sheet_data = temp_seet;
-      this.metadata = temp_metadata;
 
-      let response = await this.callCenterReport({
-        sheet_data: this.sheet_data,
-        document_name: this.document_name,
-        metadata: this.metadata
-      });
+      document.getElementById("uploadButton").disabled = true;
 
-      this.$toasted.show(response.message+": "+response.rows+" Importados.", {
-        theme: "bubble",
-        position: "top-right",
-        duration: 5000
-      });
+      this.paginateData = chunkArray(this.sheet_data, 50);
+
+      for (let short_data of this.paginateData) {
+        console.log(short_data);
+
+        let response = await this.callCenterReport({
+          sheet_data: short_data,
+          document_name: this.document_name
+        });
+
+        this.$toasted.show(
+          response.message + ": " + response.rows + " Importados.",
+          {
+            theme: "bubble",
+            position: "top-right",
+            duration: 5000
+          }
+        );
+      }
+
+      document.getElementById("uploadButton").disabled = false;
+
     },
     async xlsxLoad(e) {
       var files = e.target.files,
@@ -113,12 +129,28 @@ export default {
         let worksheet = workbook.Sheets[sheetName];
         temp_seet = XLSX.utils.sheet_to_json(worksheet);
         console.log(temp_seet);
-        temp_metadata = workbook;
+        document.getElementById("uploadButton").disabled = false;
+
+        // temp_pagination = chunkArray(temp_seet, 50);
       };
       reader.readAsArrayBuffer(f);
     }
   }
 };
+
+function chunkArray(myArray, chunk_size) {
+  var index = 0;
+  var arrayLength = myArray.length;
+  var tempArray = [];
+
+  for (index = 0; index < arrayLength; index += chunk_size) {
+    let myChunk = myArray.slice(index, index + chunk_size);
+    // Do something if you want with the group
+    tempArray.push(myChunk);
+  }
+
+  return tempArray;
+}
 </script>
 <style lang="scss" scoped>
 // @import "@/styles/index.scss";
