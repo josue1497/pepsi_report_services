@@ -13,7 +13,8 @@ export default {
   },
   data() {
     return {
-      ctx: null
+      ctx: null,
+      htmlLegend: null
     };
   },
   mounted() {
@@ -26,5 +27,6 @@ export default {
       },
       { immediate: true }
     );
+    this.htmlLegend = this.generateLegend();
   }
 };

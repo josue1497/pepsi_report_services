@@ -4,7 +4,7 @@ import globalOptionsMixin from "@/components/Charts/globalOptionsMixin";
 export default {
   name: 'bar-chart',
   extends: Bar,
-  mixins: [mixins.reactiveData, globalOptionsMixin],
+  mixins: [mixins.reactiveProp, globalOptionsMixin],
   props: {
     extraOptions: {
       type: Object,

@@ -190,6 +190,10 @@
             {
               label: 'Performance',
               data: this.bigLineChart.allData[index]
+            },
+            {
+              label: 'Performance',
+              data: this.bigLineChart.allData[1]
             }
           ],
           labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],

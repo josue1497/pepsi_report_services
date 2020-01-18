@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="w-100">
     <base-header type="pepsi-primary" class="pb-6 pb-8 pt-5 pt-md-8">
       <div class="row justify-content-start">
         <div class="col-md-12">
@@ -15,8 +15,7 @@
                 <option
                   v-bind:key="index"
                   v-for="(user, index) in users"
-                  :value="user.id"
-                >{{user.name}} {{user.lastname}}</option>
+                  :value="user.id">{{user.name}} {{user.lastname}}</option>
               </select>
             </div>
           </div>
@@ -51,7 +50,7 @@
                     class="btn btn-pepsi-tertiary sm mt-4"
                     id="search"
                     value="Buscar"
-                    @click="show_alert"
+                    @click.prevent="show_alert"
                   />
                 </div>
               </div>
@@ -169,7 +168,7 @@ export default {
                 "rgba(153, 102, 255)",
                 "rgba(153, 102, 255)",
                 "rgba(153, 102, 255)",
-                "rgba(153, 102, 255)",
+                "rgba(153, 102, 255)"
               ]
             },
             {
@@ -182,8 +181,7 @@ export default {
                 "rgba(255, 159, 64)",
                 "rgba(255, 159, 64)",
                 "rgba(255, 159, 64)",
-                "rgba(255, 159, 64)",
-                
+                "rgba(255, 159, 64)"
               ]
             },
             {
@@ -191,25 +189,25 @@ export default {
               data: [],
               backgroundColor: [
                 "rgba(255, 152, 62)",
-              "rgba(255, 152, 62)",
-              "rgba(255, 152, 62)",
-              "rgba(255, 152, 62)",
-              "rgba(255, 152, 62)",
-              "rgba(255, 152, 62)",
-              "rgba(255, 152, 62)"
+                "rgba(255, 152, 62)",
+                "rgba(255, 152, 62)",
+                "rgba(255, 152, 62)",
+                "rgba(255, 152, 62)",
+                "rgba(255, 152, 62)",
+                "rgba(255, 152, 62)"
               ]
             },
             {
               label: "SMS",
               data: [],
               backgroundColor: [
-               "rgba(255, 206, 86)",
                 "rgba(255, 206, 86)",
                 "rgba(255, 206, 86)",
                 "rgba(255, 206, 86)",
                 "rgba(255, 206, 86)",
                 "rgba(255, 206, 86)",
                 "rgba(255, 206, 86)",
+                "rgba(255, 206, 86)"
               ]
             }
           ]
@@ -244,7 +242,7 @@ export default {
                 "rgba(54, 162, 235)",
                 "rgba(54, 162, 235)"
               ]
-            },
+            }
           ]
         }
       },
@@ -315,6 +313,7 @@ export default {
     },
     async show_alert() {
       console.log("pass");
+      this.loaded = false;
 
       let response = await this.getData();
 
@@ -322,6 +321,10 @@ export default {
       this.dataChats = response.chat_data;
       this.dataEmails = response.email_data;
 
+      this.cc_chart.chartData.labels = [];
+      for (let item of this.cc_chart.chartData.datasets) {
+        item.data = [];
+      }
       for (let item of this.dataCallCenter) {
         this.cc_chart.chartData.labels.push(item.date);
         this.cc_chart.chartData.datasets[0].data.push(item.call_assigned);
@@ -333,12 +336,20 @@ export default {
         this.cc_chart.chartData.datasets[6].data.push(item.sms);
       }
 
+      this.ch_chart.chartData.labels = [];
+      for (let item of this.ch_chart.chartData.datasets) {
+        item.data = [];
+      }
       for (let item of this.dataChats) {
         this.ch_chart.chartData.labels.push(item.date);
         this.ch_chart.chartData.datasets[0].data.push(item.chat_assigned);
         this.ch_chart.chartData.datasets[1].data.push(item.chat_managed);
       }
 
+      this.em_chart.chartData.labels = [];
+      for (let item of this.em_chart.chartData.datasets) {
+        item.data = [];
+      }
       for (let item of this.dataEmails) {
         this.em_chart.chartData.labels.push(item.date);
         this.em_chart.chartData.datasets[0].data.push(item.email_assigned);

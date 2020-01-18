@@ -41,7 +41,7 @@
     </v-layout>
   </v-container>-->
 
-  <div class="container">
+  <div class="w-100">
     <base-header type="gradient-blue" class="pb-6 pb-8 pt-5 pt-md-8">
       <!-- Card stats -->
       <div class="row justify-content-center">

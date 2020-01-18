@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="w-100">
     <base-header type="pepsi-primary" class="pb-6 pb-8 pt-5 pt-md-8">
       <div class="d-flex justify-content-center">
         <template>

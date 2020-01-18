@@ -126,6 +126,21 @@ const router = new Router({
           component: () => import('./../views/reports/KitDetailsReport.vue'), meta: { requiresAuth: true }
         },
         {
+          path: 'reports/general_indicators',
+          name: 'Indicadores generales',
+          component: () => import('./../views/reports/KitReport.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/expired_orders',
+          name: 'Indicadores generales',
+          component: () => import('./../views/reports/ExpireOrders.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/detail_orders',
+          name: 'Indicadores generales',
+          component: () => import('./../views/reports/DetailsOrders.vue'), meta: { requiresAuth: true }
+        },
+        {
           path: 'config',
           name: 'Importador de Atencion al cliente',
           component: () => import('./../views/admin/Configurations.vue'), meta: { requiresAuth: true }

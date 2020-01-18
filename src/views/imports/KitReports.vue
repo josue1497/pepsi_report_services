@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="w-100">
     <base-header type="pepsi-primary" class="pb-6 pb-8 pt-5 pt-md-8">
       <div class="d-flex justify-content-center">
         <template>
@@ -83,7 +83,10 @@ export default {
     },
     async upload() {
       this.sheet_data = temp_seet;
-       document.getElementById('uploadButton').disabled=true;
+
+      let total_rows = this.sheet_data.length;
+
+      document.getElementById('uploadButton').disabled=true;
 
       this.paginateData = chunkArray(this.sheet_data, 50);
 
@@ -92,11 +95,12 @@ export default {
 
         let response = await this.callCenterReport({
           sheet_data: short_data,
-          document_name: this.document_name
+          document_name: this.document_name,
+          total_rows: total_rows
         });
 
         this.$toasted.show(
-          response.message + ": " + response.rows + " Importados.",
+          response.message + ": " + response.rows + " Importados, Actualizados: "+response.updated+".",
           {
             theme: "bubble",
             position: "top-right",
