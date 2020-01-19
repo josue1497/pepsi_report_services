@@ -48,11 +48,11 @@ function chartOptions(Chart) {
           padding: 0
         },
         legend: {
-          display: false,
+          display: true,
           position: 'bottom',
           labels: {
             usePointStyle: true,
-            padding: 16
+            padding: 20
           }
         },
         elements: {
@@ -63,9 +63,10 @@ function chartOptions(Chart) {
           line: {
             tension: .4,
             borderWidth: 4,
-            borderColor: colors.theme['primary'],
+            borderColor: colors.theme['secondary'],
             backgroundColor: colors.transparent,
-            borderCapStyle: 'rounded'
+            borderCapStyle: 'square',
+            lineTension: 0,
           },
           rectangle: {
             backgroundColor: colors.theme['warning']
@@ -77,7 +78,7 @@ function chartOptions(Chart) {
           }
         },
         tooltips: {
-          enabled: true,
+          enabled: false,
           mode: 'index',
           intersect: false,
         }

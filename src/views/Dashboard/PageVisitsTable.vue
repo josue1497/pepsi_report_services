@@ -3,10 +3,7 @@
     <div class="card-header border-0">
       <div class="row align-items-center">
         <div class="col">
-          <h3 class="mb-0">Page visits</h3>
-        </div>
-        <div class="col text-right">
-          <a href="#!" class="btn btn-sm btn-primary">See all</a>
+          <h3 class="mb-0">Asesores destacados: Ordenes procesadas</h3>
         </div>
       </div>
     </div>
@@ -15,10 +12,9 @@
       <base-table thead-classes="thead-light"
                   :data="tableData">
         <template slot="columns">
-          <th>Page name</th>
-          <th>Visitors</th>
-          <th>Unique users</th>
-          <th>Bounce rate</th>
+          <th>Asesor</th>
+          <th>Ordenes</th>
+          <th>Posición</th>
         </template>
 
         <template slot-scope="{row}">
@@ -29,11 +25,7 @@
             {{row.visitors}}
           </td>
           <td>
-            {{row.unique}}
-          </td>
-          <td>
-            <i class="fas fa-arrow-up text-success mr-3"
-               :class="row.bounceRateDirection === 'up' ? 'text-success': 'text-danger'">
+            <i class="fas fa-star text-warning mr-3">
             </i>
             {{row.bounceRate}}
           </td>
