@@ -25,12 +25,29 @@ import './registerServiceWorker';
 import ArgonDashboard from './plugins/argon-dashboard';
 import store from '@/store';
 import Toasted from 'vue-toasted';
-
+import VueLoading from 'vuejs-loading-plugin'
+import VueToastify from 'vue-toastify';
 
 Vue.config.productionTip = false;
 
 Vue.use(ArgonDashboard);
 Vue.use(Toasted);
+
+// overwrite defaults
+Vue.use(VueLoading, {
+  dark: true, // default false
+  text: 'Cargando', // default 'Loading'
+  loading: true, // default false
+  background: 'rgb(255,255,255, .5)', // set custom background
+});
+
+Vue.use(VueToastify, {
+  canTimeout: true,
+  duration: 3000,
+  position: "top-right",
+  defaultTitle: 'InformaciÃ³n',
+  theme: 'light'
+});
 
 new Vue({
   router,

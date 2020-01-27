@@ -223,6 +223,9 @@ export default {
     BarChart,
     PieChart
   },
+  mounted() {
+    this.$loading(false);
+  },
   data() {
     return {
       chart_cancelled: {
@@ -359,7 +362,6 @@ export default {
 
         switch (item.name) {
           case "ZPMI": {
-
             this.order_class_chart.chartData.datasets[0].data.push(item.cant);
             this.order_class_chart.chartData.datasets[0].borderColor.push(
               this.getRandomColor()
@@ -367,7 +369,6 @@ export default {
             break;
           }
           case "ZPMC": {
-
             this.order_class_chart.chartData.datasets[1].data.push(item.cant);
             this.order_class_chart.chartData.datasets[1].borderColor.push(
               this.getRandomColor()
@@ -387,20 +388,16 @@ export default {
         }
       }
 
-
-
       this.chart_cancelled.chartData.labels = [];
       for (let item of this.chart_cancelled.chartData.datasets) {
         item.data = [];
       }
       for (let item of this.dataCancelled) {
-        
         let index = this.getKeyByValue(
           this.chart_cancelled.chartData.labels,
           item.entry_date
         );
-        if (!index)
-          this.chart_cancelled.chartData.labels.push(item.entry_date);
+        if (!index) this.chart_cancelled.chartData.labels.push(item.entry_date);
 
         this.chart_cancelled.chartData.labels.push(item.entry_date);
         this.chart_cancelled.chartData.datasets[0].data.push(item.cant);

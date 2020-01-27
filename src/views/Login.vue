@@ -60,6 +60,9 @@ import global from "@/constants/GlobalConstants";
 import { mapGetters, mapActions, mapState } from "vuex";
 export default {
   name: "login",
+  mounted(){
+    this.$loading(false);
+  },
   data() {
     return {
       model: {

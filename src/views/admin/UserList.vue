@@ -10,7 +10,9 @@
                 <h3 class="mb-0 text-dark">Listado de Usuarios</h3>
               </div>
               <div class="col text-right">
-                <base-button type="secondary" color="pepsi-primary" size="md"> <i class="ni ni-fat-add"></i> Añadir Usuario</base-button>
+                <base-button type="secondary" color="pepsi-primary" size="md" @click="new_modal">
+                  <i class="ni ni-fat-add"></i> Añadir Usuario
+                </base-button>
               </div>
             </div>
           </div>
@@ -36,9 +38,9 @@
                 <td>{{ row.email }}</td>
                 <td>
                   <base-button type="primary" size="sm" class="btn btn-pepsi-primary">
-                    <i class="ni ni-ruler-pencil"></i>
                     <span>Editar</span>
                   </base-button>
+                  <base-button type="danger" color="pepsi-primary" size="sm">Desactivar</base-button>
                 </td>
               </template>
             </base-table>
@@ -47,17 +49,50 @@
           <div class="card-footer d-flex justify-content-end" :class="''">
             <base-pagination :total="30"></base-pagination>
           </div>
-
         </div>
       </div>
     </base-header>
+    <modal :show="dialog" :showClose="true">
+      <template slot="header">
+        <div class="d-flex align-content-center">
+          <h3>Hola</h3>
+        </div>
+      </template>
+      <template slot="close-button">
+        <button
+          type="button"
+          class="close"
+          v-if="true"
+          @click="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span :aria-hidden="!show">×</span>
+        </button>
+      </template>
+      <template slot="modal-body">
+        <div>
+          <h1>Hola</h1>
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="d-flex align-content-center">
+          <button class="btn btn-primary" @click="close">Aceptar</button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
 import userServices from "./../../services/userServices";
+import JQuery from "jquery";
+let $ = JQuery;
 
 export default {
+  mounted() {
+    this.$loading(false);
+  },
   data: () => ({
     search: "",
     dialog: false,
@@ -99,6 +134,9 @@ export default {
       console.log(temp);
       this.tableData = temp.data;
     },
+    new_modal() {
+      this.dialog = true;
+    },
     editItem(item) {
       // this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -124,13 +162,13 @@ export default {
         this.desserts.splice(index, 1);
     },
 
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
+    // close() {
+    //   this.dialog = false;
+    //   setTimeout(() => {
+    //     this.editedItem = Object.assign({}, this.defaultItem);
+    //     this.editedIndex = -1;
+    //   }, 300);
+    // },
 
     save() {
       if (this.editedIndex > -1) {
@@ -139,6 +177,9 @@ export default {
         this.desserts.push(this.editedItem);
       }
       this.close();
+    },
+    close() {
+      this.dialog = false;
     }
   }
 };

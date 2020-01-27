@@ -113,6 +113,9 @@ export default {
     LineChart,
     BarChart
   },
+  mounted(){
+    this.$loading(false);
+  },
   data() {
     return {
       cc_chart: {

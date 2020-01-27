@@ -68,6 +68,9 @@ export default {
     BarChart,
     PieChart
   },
+  mounted() {
+    this.$loading(false);
+  },
   data() {
     return {
       chart: {
@@ -172,7 +175,7 @@ export default {
       });
     },
     async init() {
-        this.show_alert();
+      this.show_alert();
     }
   }
 };

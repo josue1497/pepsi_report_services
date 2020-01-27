@@ -184,6 +184,9 @@ export default {
   components: {
     PieChart
   },
+  mounted() {
+    this.$loading(false);
+  },
   data() {
     return {
       chartOptions: {

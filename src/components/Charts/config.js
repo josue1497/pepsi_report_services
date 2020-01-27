@@ -78,7 +78,7 @@ function chartOptions(Chart) {
           }
         },
         tooltips: {
-          enabled: false,
+          enabled: true,
           mode: 'index',
           intersect: false,
         }

@@ -116,6 +116,9 @@ export default {
     BarChart,
     PieChart
   },
+  mounted() {
+    this.$loading(false);
+  },
   data() {
     return {
       chart: {
@@ -160,7 +163,11 @@ export default {
         item.backgroundColor = [];
       }
 
-      let response = await this.getData({site: this.site, from_date: this.from_date, to_date: this.to_date});
+      let response = await this.getData({
+        site: this.site,
+        from_date: this.from_date,
+        to_date: this.to_date
+      });
       console.log(response);
 
       this.count_data = response.data;

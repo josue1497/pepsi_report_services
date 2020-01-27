@@ -9,8 +9,7 @@
     </div>
 
     <div class="table-responsive">
-      <base-table thead-classes="thead-light"
-                  :data="tableData">
+      <base-table thead-classes="thead-light" :data="table_data">
         <template slot="columns">
           <th>Asesor</th>
           <th>Llamadas</th>
@@ -18,70 +17,40 @@
         </template>
 
         <template slot-scope="{row}">
-          <th scope="row">
-            {{row.name}}
-          </th>
-          <td>
-            {{row.visitors}}
-          </td>
+          <th scope="row">{{row.names}}</th>
+          <td>{{row.cant}}</td>
           <td>
             <div class="d-flex align-items-center">
-              <span class="mr-2">{{row.progress}}%</span>
-              <base-progress :type="row.progressType"
-                             class="pt-0"
-                             :show-percentage="false"
-                             :value="row.progress"
+              <span class="mr-2">{{row-cant}}</span>
+              <base-progress
+                type="gradient-success"
+                class="pt-0"
+                :show-percentage="false"
+                :value="(parseInt(row.cant)/1000)*100"
               />
             </div>
           </td>
         </template>
-
       </base-table>
     </div>
-
   </div>
 </template>
 <script>
-  export default {
-    name: 'social-traffic-table',
-    data() {
-      return {
-        tableData: [
-          {
-            name: 'Facebook',
-            visitors: '1,480',
-            progress: 60,
-            progressType: 'gradient-danger',
-          },
-          {
-            name: 'LinkedIn',
-            visitors: '5,480',
-            progress: 70,
-            progressType: 'gradient-success',
-          },
-          {
-            name: 'Google',
-            visitors: '4,807',
-            progress: 80,
-            progressType: 'gradient-primary',
-          },
-          {
-            name: 'Instagram',
-            visitors: '3,678',
-            progress: 75,
-            progressType: 'gradient-info',
-          },
-          {
-            name: 'Twitter',
-            visitors: '2,645',
-            progress: 30,
-            progressType: 'gradient-warning',
-          }
-        ]
-      }
+export default {
+  name: "social-traffic-table",
+  props: {
+    table_data: {
+      type: Array,
+      description: "Data of table",
+      default: []
     }
-
-  }
+  },
+  data() {
+    return {
+      tableData: []
+    };
+  },
+};
 </script>
 <style>
 </style>

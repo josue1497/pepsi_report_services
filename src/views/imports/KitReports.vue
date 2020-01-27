@@ -37,7 +37,12 @@
               </div>
             </div>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-pepsi-primary" @click="upload" id="uploadButton" disabled="true">Cargar</button>
+              <button
+                class="btn btn-pepsi-primary"
+                @click="upload"
+                id="uploadButton"
+                disabled="true"
+              >Cargar</button>
             </div>
           </card>
         </template>
@@ -53,6 +58,9 @@ var temp_seet;
 var temp_pagination;
 
 export default {
+  mounted() {
+    this.$loading(false);
+  },
   data: () => ({
     sheet_data: [],
     document_name: "",
@@ -82,11 +90,13 @@ export default {
       });
     },
     async upload() {
+      this.$loading(true);
+
       this.sheet_data = temp_seet;
 
       let total_rows = this.sheet_data.length;
 
-      document.getElementById('uploadButton').disabled=true;
+      document.getElementById("uploadButton").disabled = true;
 
       this.paginateData = chunkArray(this.sheet_data, 50);
 
@@ -99,13 +109,11 @@ export default {
           total_rows: total_rows
         });
 
-        this.$toasted.show(
-          response.message + ": " + response.rows + " Importados, Actualizados: "+response.updated+".",
-          {
-            theme: "bubble",
-            position: "top-right",
-            duration: 5000
-          }
+        this.$loading(false);
+
+        this.$vToastify.info(
+          response.message + ": " + response.rows + " Importados.",
+          "Información"
         );
       }
     },
@@ -123,7 +131,7 @@ export default {
         console.log(workbook);
         let worksheet = workbook.Sheets[sheetName];
         temp_seet = XLSX.utils.sheet_to_json(worksheet);
-        document.getElementById('uploadButton').disabled=false;
+        document.getElementById("uploadButton").disabled = false;
       };
       reader.readAsArrayBuffer(f);
     }

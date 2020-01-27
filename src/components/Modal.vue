@@ -15,19 +15,19 @@
           <div class="modal-header" :class="[headerClasses]" v-if="$slots.header">
             <slot name="header"></slot>
             <slot name="close-button">
-              <button type="button"
+              <!-- <button type="button"
                       class="close"
                       v-if="showClose"
                       @click="closeModal"
                       data-dismiss="modal"
                       aria-label="Close">
                 <span :aria-hidden="!show">×</span>
-              </button>
+              </button> -->
             </slot>
           </div>
 
           <div class="modal-body" :class="bodyClasses">
-            <slot></slot>
+            <slot name="modal-body"></slot>
           </div>
 
           <div class="modal-footer" :class="footerClasses" v-if="$slots.footer">

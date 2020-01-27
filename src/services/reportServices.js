@@ -46,6 +46,14 @@ const reportServices = {
       method: 'post',
       headers:{'Content-Type':'application/json'}
     });
+  },
+  getDashboardData(data) {
+    return request({
+      url: `/reports/dashboard_data`,
+      method: 'post',
+      data: data,
+      headers:{'Content-Type':'application/json'}
+    });
   }
 };
 

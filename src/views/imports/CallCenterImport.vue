@@ -37,7 +37,12 @@
               </div>
             </div>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-pepsi-primary" @click="upload">Cargar</button>
+              <button
+                class="btn btn-pepsi-primary"
+                @click="upload"
+                id="uploadButton"
+                disabled="true"
+              >Cargar</button>
             </div>
           </card>
         </template>
@@ -53,10 +58,13 @@ var temp_seet;
 var temp_metadata;
 
 export default {
+  mounted() {
+    this.$loading(false);
+  },
   data: () => ({
     sheet_data: [],
     document_name: "",
-    metadata: [],
+    metadata: []
   }),
   computed: {
     ...mapState("userData", [
@@ -82,9 +90,11 @@ export default {
       });
     },
     async upload() {
-      console.log(temp_seet);
+      this.$loading(true);
+
       this.sheet_data = temp_seet;
       this.metadata = temp_metadata;
+      document.getElementById("uploadButton").disabled = true;
 
       let response = await this.callCenterReport({
         sheet_data: this.sheet_data,
@@ -92,11 +102,11 @@ export default {
         metadata: this.metadata
       });
 
-      this.$toasted.show(response.message+": "+response.rows+" Importados.", {
-        theme: "bubble",
-        position: "top-right",
-        duration: 5000
-      });
+      this.$vToastify.info(
+        response.message + ": " + response.rows + " Importados.",
+        "Información"
+      );
+      this.$loading(false);
     },
     async xlsxLoad(e) {
       var files = e.target.files,
@@ -114,6 +124,7 @@ export default {
         temp_seet = XLSX.utils.sheet_to_json(worksheet);
         console.log(temp_seet);
         temp_metadata = workbook;
+        document.getElementById("uploadButton").disabled = false;
       };
       reader.readAsArrayBuffer(f);
     }

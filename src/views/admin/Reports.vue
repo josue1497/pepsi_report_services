@@ -73,6 +73,9 @@
 </style>
 <script>
 export default {
+  mounted(){
+    this.$loading(false);
+  },
   data() {
     return {};
   },

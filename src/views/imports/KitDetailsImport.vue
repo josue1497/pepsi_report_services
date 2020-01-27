@@ -63,6 +63,9 @@ export default {
     document_name: "",
     paginateData: []
   }),
+  mounted(){
+    this.$loading(false);
+  },
   computed: {
     ...mapState("userData", [
       "user",
@@ -87,6 +90,8 @@ export default {
       });
     },
     async upload() {
+      this.$loading(true);
+
       this.sheet_data = temp_seet;
 
       let total_rows = this.sheet_data.length;
@@ -104,14 +109,12 @@ export default {
           total_rows: total_rows
         });
 
-        this.$toasted.show(
-          response.message + ": " + response.rows + " Importados.",
-          {
-            theme: "bubble",
-            position: "top-right",
-            duration: 5000
-          }
-        );
+      this.$loading(false);
+
+        this.$vToastify.info(
+        response.message + ": " + response.rows + " Importados.",
+        "Información"
+      );
       }
 
       document.getElementById("uploadButton").disabled = false;
