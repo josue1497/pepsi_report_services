@@ -4,7 +4,7 @@
  * official documentation https://router.vuejs.org/en/
  */
 const route = {
-  admin_routes : [
+  admin_routes: [
     {
       to: '/admin/dashboard',
       icon: 'ni ni-tv-2  text-pepsi-primary',
@@ -19,6 +19,11 @@ const route = {
       to: '/admin/instalations',
       icon: 'ni ni-bullet-list-67 text-pepsi-primary',
       text: 'Instalaciones'
+    },
+    {
+      to: '/user/desicion_matrix',
+      icon: 'ni ni-archive-2 text-pepsi-primary',
+      text: 'Matriz de Decisión'
     },
     {
       to: '/admin/import-data',
@@ -43,23 +48,29 @@ const route = {
       text: 'Dashboard'
     },
     {
-      to: '/user/report_calls',
-      icon: 'mdi-view-dashboard',
-      text: 'Reporte de Operador'
-    },
-    {
       to: '/user/instalations',
-      icon: 'mdi-view-dashboard',
+      icon: 'ni ni-bullet-list-67 text-pepsi-primary',
       text: 'Instalaciones'
     },
     {
+      to: '/user/desicion_matrix',
+      icon: 'ni ni-archive-2 text-pepsi-primary',
+      text: 'Matriz de Decisión'
+    },
+    {
       to: '/user/reports',
-      icon: 'mdi-adjust',
+      icon: 'ni ni-chart-bar-32 text-pepsi-primary',
       text: 'Reportes'
     },
+    {
+      to: '/user/import-data',
+      icon: 'ni ni-archive-2 text-pepsi-primary',
+      text: 'Importadores'
+    },
+
   ]
 }
-  
- 
+
+
 
 export default route;

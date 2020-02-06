@@ -30,7 +30,8 @@
           >
             <template slot="footer">
               <span :class="(!order_current)?'text-success mr-2 ':'text-danger mr-2 '">
-                <i :class="(!order_current)?'fa fa-arrow-up':' fa fa-arrow-down'"></i> {{total_orders_last}}
+                <i :class="(!order_current)?'fa fa-arrow-up':' fa fa-arrow-down'"></i>
+                {{total_orders_last}}
               </span>
               <span class="text-nowrap">Ultimo mes</span>
             </template>
@@ -46,7 +47,8 @@
           >
             <template slot="footer">
               <span :class="(!call_r_current)?'text-success mr-2 ':'text-danger mr-2 '">
-                <i :class="(!call_r_current)?'fa fa-arrow-up':' fa fa-arrow-down'"></i> {{total_calls_r_last}}
+                <i :class="(!call_r_current)?'fa fa-arrow-up':' fa fa-arrow-down'"></i>
+                {{total_calls_r_last}}
               </span>
               <span class="text-nowrap">Ultimo mes</span>
             </template>
@@ -62,7 +64,8 @@
           >
             <template slot="footer">
               <span :class="(!order_a_current)?'text-success mr-2 ':'text-danger mr-2 '">
-                <i :class="(!order_a_current)?'fa fa-arrow-up':' fa fa-arrow-down'"></i> {{total_orders_a_last}}
+                <i :class="(!order_a_current)?'fa fa-arrow-up':' fa fa-arrow-down'"></i>
+                {{total_orders_a_last}}
               </span>
               <span class="text-nowrap">Ultimos mes</span>
             </template>
@@ -82,7 +85,8 @@
                 <h5 class="h3 text-white mb-0">Ultimos 5 dias habiles.</h5>
               </div>
             </div>
-            <line-chart v-if="loaded"
+            <line-chart
+              v-if="loaded"
               :height="350"
               ref="bigChart"
               :chart-data="bigLineChart.chartData"
@@ -100,7 +104,12 @@
               </div>
             </div>
 
-            <bar-chart v-if="loaded" :height="350" ref="barChart" :chart-data="redBarChart.chartData"></bar-chart>
+            <bar-chart
+              v-if="loaded"
+              :height="350"
+              ref="barChart"
+              :chart-data="redBarChart.chartData"
+            ></bar-chart>
           </card>
         </div>
       </div>
@@ -130,6 +139,7 @@ import SocialTrafficTable from "./Dashboard/SocialTrafficTable";
 import PageVisitsTable from "./Dashboard/PageVisitsTable";
 
 import reportServices from "./../services/reportServices";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -138,22 +148,28 @@ export default {
     PageVisitsTable,
     SocialTrafficTable
   },
+  computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
+  },
   data() {
     return {
       bigLineChart: {
         activeIndex: 0,
         chartData: {
-          datasets: [{
-            label: 'Llamadas Atendidas',
-            data: [],
-            borderColor: [],
-            backgroundColor:[]
-            
-          }
+          datasets: [
+            {
+              label: "Ordenes Atendidas",
+              data: []
+            }
           ],
           labels: []
         },
-        extraOptions: chartConfigs.blueChartOptions,
+        extraOptions: [],
         annotation: {
           annotations: [
             {
@@ -236,10 +252,10 @@ export default {
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
     },
-    getData() {
+    getData(data) {
       return new Promise((resolve, reject) => {
         reportServices
-          .getDashboardData({})
+          .getDashboardData(data)
           .then(response => {
             console.log(response);
             resolve(response);
@@ -251,35 +267,59 @@ export default {
       });
     },
     async processData() {
-      console.log("pass");
+      this.$loading(true);
       this.loaded = false;
-
-      let response = await this.getData();
+      console.log(this.user);
+      let response = await this.getData({user_id: this.user.id, role_id: this.user.role_id});
       console.log(response);
 
       this.data_total_calls_m = response.data_call_manage;
-      this.total_calls_current = this.data_total_calls_m[1].cant;
+      this.total_calls_current = this.data_total_calls_m[1]
+        ? this.data_total_calls_m[1].cant
+        : 0;
       this.call_current =
-        this.data_total_calls_m[0].cant > this.data_total_calls_m[1].cant;
+        this.data_total_calls_m[0].cant > this.data_total_calls_m[1]
+          ? this.data_total_calls_m[1].cant
+          : 0;
       this.total_calls_last =
-        this.data_total_calls_m[0].cant - this.data_total_calls_m[1].cant;
+        this.data_total_calls_m[0].cant - this.data_total_calls_m[1]
+          ? this.data_total_calls_m[1].cant
+          : 0;
 
       this.data_total_calls_r = response.data_call_rejected;
-      this.total_calls_r_current = this.data_total_calls_r[1].cant;
+      this.total_calls_r_current = this.data_total_calls_r[1]
+        ? this.data_total_calls_r[1].cant
+        : 0;
       this.call_r_current =
-        this.data_total_calls_r[0].cant > this.data_total_calls_r[1].cant;
+        this.data_total_calls_r[0].cant > this.data_total_calls_r[1]
+          ? this.data_total_calls_r[1].cant
+          : 0;
       this.total_calls_r_last =
-        this.data_total_calls_r[0].cant - this.data_total_calls_r[1].cant;
+        this.data_total_calls_r[0].cant - this.data_total_calls_r[1]
+          ? this.data_total_calls_r[1].cant
+          : 0;
 
       this.data_total_orders_m = response.data_orders_total;
-      this.total_orders_currents = this.data_total_orders_m[1].cant;
-      this.order_current = this.data_total_orders_m[0].cant>this.data_total_orders_m[1].cant;
+      this.total_orders_currents = this.data_total_orders_m[1]
+        ? this.data_total_orders_m[1].cant
+        : 0;
+      this.order_current =
+        this.data_total_orders_m[0].cant > this.data_total_orders_m[1]
+          ? this.data_total_orders_m[1].cant
+          : 0;
 
-      this.total_orders_last = this.data_total_orders_m[0].cant-this.data_total_orders_m[1].cant;
+      this.total_orders_last =
+        this.data_total_orders_m[0].cant - this.data_total_orders_m[1]
+          ? this.data_total_orders_m[1].cant
+          : 0;
 
       this.data_total_orders_a = response.data_order_anuladas;
-      this.total_orders_a_current = this.data_total_orders_a[0].cant;
-      this.total_orders_a_last = this.data_total_orders_a[1].cant;
+      this.total_orders_a_current = this.data_total_orders_a[0]
+        ? this.data_total_orders_a[0].cant
+        : 0;
+      this.total_orders_a_last = this.data_total_orders_a[1]
+        ? this.data_total_orders_a[1].cant
+        : 0;
 
       this.data_best_calls = response.data_call_best;
       this.data_best_orders = response.data_order_best;
@@ -287,15 +327,12 @@ export default {
       this.data_calls_by_dates = response.data_call_by_date;
       this.data_orders_by_dates = response.data_order_by_date;
 
-
-      for(let item of this.data_orders_by_dates){
+      for (let item of this.data_orders_by_dates) {
         this.bigLineChart.chartData.datasets[0].data.push(item.cant);
-         this.bigLineChart.chartData.datasets[0].borderColor.push("#e42934");
-         this.bigLineChart.chartData.datasets[0].backgroundColor.push("#e42934");
         this.bigLineChart.chartData.labels.push(item.entry_date);
       }
 
-      for(let item of this.data_calls_by_dates){
+      for (let item of this.data_calls_by_dates) {
         this.redBarChart.chartData.datasets[0].data.push(item.cant);
         this.redBarChart.chartData.datasets[0].borderColor.push("#000e93");
         this.redBarChart.chartData.datasets[0].backgroundColor.push("#000e93");
@@ -307,13 +344,12 @@ export default {
         this.redBarChart.chartData.labels.push(item.date);
       }
 
-      this.loaded=true;
+      this.loaded = true;
+      this.$loading(false);
     }
   },
   mounted() {
-    this.processData(); 
-       this.$loading(false);
-
+    this.processData();
   }
 };
 </script>

@@ -3,7 +3,7 @@
     <div class="row align-items-center justify-content-lg-between">
       <div class="col-lg-6">
         <div class="copyright text-center text-lg-left text-muted">
-          © {{year}} <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Pepsi CO</a>
+        <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank"><img src="/img/eplogo.png" alt="logo" width="100px"></a>  © {{year}} 
         </div>
       </div>
       <div class="col-lg-6 d-none">

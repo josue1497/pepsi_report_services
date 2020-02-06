@@ -62,11 +62,21 @@ import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
 import PieChart from "@/components/Charts/PieChart";
 
+import { mapGetters, mapActions, mapState } from "vuex";
+
 export default {
   components: {
     LineChart,
     BarChart,
     PieChart
+  },
+  computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
   },
   mounted() {
     this.$loading(false);
@@ -96,7 +106,6 @@ export default {
     console.log("start");
     this.init();
   },
-  computed: {},
   methods: {
     complete(index) {
       this.list[index] = !this.list[index];
@@ -104,6 +113,7 @@ export default {
     async show_alert() {
       console.log("pass");
       this.loaded = false;
+      this.$loading(true);
 
       this.chart.chartData.labels = [];
       for (let item of this.chart.chartData.datasets) {
@@ -111,8 +121,8 @@ export default {
         item.data = [];
         item.backgroundColor = [];
       }
-
-      let response = await this.getData();
+      console.log(this.user_logged);
+      let response = await this.getData({user_id: this.user.id, role_id: this.user.role_id});
       console.log(response);
 
       this.count_data = response.count_data;
@@ -128,6 +138,7 @@ export default {
       }
 
       this.loaded = true;
+      this.$loading(false);
 
       this.$toasted.show(response.message, {
         theme: "bubble",
@@ -146,10 +157,10 @@ export default {
       }
       return color;
     },
-    getData() {
+    getData(data) {
       return new Promise((resolve, reject) => {
         reportServices
-          .get_ExpiredOrders()
+          .get_ExpiredOrders(data)
           .then(response => {
             console.log(response);
             resolve(response);
@@ -165,11 +176,9 @@ export default {
         reportServices
           .getZones()
           .then(response => {
-            console.log(response);
             resolve(response);
           })
           .catch(err => {
-            console.log(err);
             reject(err);
           });
       });

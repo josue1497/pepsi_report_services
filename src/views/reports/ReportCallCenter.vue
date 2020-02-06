@@ -15,7 +15,8 @@
                 <option
                   v-bind:key="index"
                   v-for="(user, index) in users"
-                  :value="user.id">{{user.name}} {{user.lastname}}</option>
+                  :value="user.id"
+                >{{user.name}} {{user.lastname}}</option>
               </select>
             </div>
           </div>
@@ -107,13 +108,14 @@ import userServices from "./../../services/userServices";
 import * as chartConfigs from "@/components/Charts/config";
 import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   components: {
     LineChart,
     BarChart
   },
-  mounted(){
+  mounted() {
     this.$loading(false);
   },
   data() {
@@ -309,7 +311,14 @@ export default {
     console.log("start");
     this.init();
   },
-  computed: {},
+  computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
+  },
   methods: {
     complete(index) {
       this.list[index] = !this.list[index];
@@ -331,12 +340,25 @@ export default {
       for (let item of this.dataCallCenter) {
         this.cc_chart.chartData.labels.push(item.date);
         this.cc_chart.chartData.datasets[0].data.push(item.call_assigned);
+        this.cc_chart.chartData.datasets[0].backgroundColor.push("rgba(255, 99, 132)");
+
         this.cc_chart.chartData.datasets[1].data.push(item.call_managed);
+        this.cc_chart.chartData.datasets[1].backgroundColor.push("rgba(54, 162, 235)");
+
         this.cc_chart.chartData.datasets[2].data.push(item.call_reject);
+        this.cc_chart.chartData.datasets[2].backgroundColor.push("rgba(75, 192, 192)");
+
         this.cc_chart.chartData.datasets[3].data.push(item.call_inquiry);
+        this.cc_chart.chartData.datasets[3].backgroundColor.push("rgba(153, 102, 255)");
+
         this.cc_chart.chartData.datasets[4].data.push(item.call_outgoing);
+        this.cc_chart.chartData.datasets[4].backgroundColor.push("rgba(255, 159, 64)");
+
         this.cc_chart.chartData.datasets[5].data.push(item.call_unattended);
+        this.cc_chart.chartData.datasets[5].backgroundColor.push("rgba(255, 152, 62)");
+
         this.cc_chart.chartData.datasets[6].data.push(item.sms);
+        this.cc_chart.chartData.datasets[6].backgroundColor.push("rgba(255, 206, 86)");
       }
 
       this.ch_chart.chartData.labels = [];
@@ -402,8 +424,15 @@ export default {
     },
     async init() {
       let temp = await this.getUsers();
-      console.log(temp);
-      this.users = temp.data;
+      let data = temp.data;
+      let id = this.user.id;
+      if (this.user.role_id === 1) {
+        this.users = data;
+      } else {
+        let us = data.find(element => element.id === id);
+        console.log(us);
+        this.users.push(us);
+      }
     }
   }
 };

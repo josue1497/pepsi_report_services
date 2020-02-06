@@ -64,6 +64,9 @@
           </div>
         </div>
       </form>
+    </base-header>
+
+    <div class="container-fluid mt--7">
       <div class="row mb-4" v-if="loaded">
         <div class="col-md-12 m-2 mb-xl-0">
           <card type="default" header-classes="bg-transparent">
@@ -98,7 +101,7 @@
           </card>
         </div>
       </div>
-    </base-header>
+    </div>
   </div>
 </template>
 <script>
@@ -109,12 +112,21 @@ import * as chartConfigs from "@/components/Charts/config";
 import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
 import PieChart from "@/components/Charts/PieChart";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   components: {
     LineChart,
     BarChart,
     PieChart
+  },
+  computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
   },
   mounted() {
     this.$loading(false);
@@ -132,7 +144,7 @@ export default {
             }
           ]
         },
-        extraOptions: chartConfigs.blueChartOptions
+        extraOptions: []
       },
       loaded: false,
       site: "",
@@ -144,10 +156,8 @@ export default {
     };
   },
   created() {
-    console.log("start");
     this.init();
   },
-  computed: {},
   methods: {
     complete(index) {
       this.list[index] = !this.list[index];
@@ -166,28 +176,38 @@ export default {
       let response = await this.getData({
         site: this.site,
         from_date: this.from_date,
-        to_date: this.to_date
+        to_date: this.to_date,
+        user_id: this.user.id,
+        role_id: this.user.role_id
       });
       console.log(response);
+      if (response.status === 200) {
+        this.count_data = response.data;
+        for (let item of this.count_data) {
+          this.chart.chartData.labels.push(item.pm_activity);
+          this.chart.chartData.datasets[0].data.push(item.cant);
+          this.chart.chartData.datasets[0].label.push(item.pm_activity);
+          this.chart.chartData.datasets[0].backgroundColor.push(
+            this.getRandomColor()
+          );
+        }
 
-      this.count_data = response.data;
+        this.loaded = true;
 
-      for (let item of this.count_data) {
-        this.chart.chartData.labels.push(item.pm_activity);
-        this.chart.chartData.datasets[0].data.push(item.cant);
-        this.chart.chartData.datasets[0].label.push(item.pm_activity);
-        this.chart.chartData.datasets[0].backgroundColor.push(
-          this.getRandomColor()
-        );
+        this.$toasted.show(response.message, {
+          theme: "bubble",
+          position: "top-right",
+          duration: 5000
+        });
+      } else {
+        this.$toasted.show(response.message, {
+          theme: "bubble",
+          position: "top-right",
+          duration: 5000
+        });
       }
 
       this.loaded = true;
-
-      this.$toasted.show(response.message, {
-        theme: "bubble",
-        position: "top-right",
-        duration: 5000
-      });
     },
     getKeyByValue(object, value) {
       return Object.keys(object).find(key => object[key] === value);

@@ -1,107 +1,56 @@
 <template>
-  <v-container fill-height fluid grid-list-xl>
-    <v-layout justify-center wrap>
-      <v-flex md12 id="lateral">
-        <material-card
-          color="primary"
-          title="Inventario Final"
-          text="Inventario enviado por mercadeo de canales - Instalaciones realizadas por el 0800-REPARAR"
-        >
-          <v-fab-transition>
-            <v-btn
-              fab
-              bottom
-              small
-              right
-              class="v-btn--example"
-              color="secondary"
-              @click="openDialog"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </v-fab-transition>
-          <v-data-table
-            :headers="headers"
-            :items="items"
-            :items-per-page="5"
-            :search="search"
-          >
-            <template slot="headerCell" slot-scope="{ header }">
-              <span class="subheading font-weight-light text-tertiary" v-text="header.text" />
-            </template>
-            <template slot="items" slot-scope="{ item }">
-              <td>{{ item.tv }}</td>
-              <td>{{ item.vc_1p }}</td>
-              <td>{{ item.vc_2p }}</td>
-              <td>{{ item.enfriador_1t }}</td>
-              <td>{{ item.enfriador_2t }}</td>
-              <td>{{ item.enfriador_3t }}</td>
-              <td>{{ item.passthrough }}</td>
-              <td>{{ sum(item) }}</td>
-              <td>
-                <template slot="actions">
-                  <v-icon class="mr-2" @click="editItem(item)">mdi-playlist-edit</v-icon>
-                </template>
-              </td>
-            </template>
-            <template slot="footer">
-              <tr>
-                <td>Totales</td>
-                <td>{{ totally.vc_1p }}</td>
-                <td>{{ totally.vc_2p }}</td>
-                <td>{{ totally.enfriador_1t }}</td>
-                <td>{{ totally.enfriador_2t }}</td>
-                <td>{{ totally.enfriador_3t }}</td>
-                <td>{{ totally.passthrough }}</td>
-                <td>{{ sum(totally) }}</td>
-              </tr>
-            </template>
-          </v-data-table>
-        </material-card>
-        <v-dialog v-model="dialog" max-width="500px" scrollable>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ editedItem.tv }}</span>
-            </v-card-title>
-            <v-divider></v-divider>
-            <v-card-text style="height: 300px;">
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.vc_1p"
-                      label="VC 1P: "
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.vc_2p" label="VC 2P: "></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.enfriador_1t" label="Enfriador 1T: "></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.enfriador_2t" label="Enfriador 2T: "></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.enfriador_3t" label="Enfriador 3T: "></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.passthrough" label="PassThrough: "></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="red" text @click="close">Cancelar</v-btn>
-              <v-btn color="primary" text @click="save">Guardar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <div class="w-100">
+    <base-header type="gradient-blue" class="pb-6 pb-8 pt-5 pt-md-8">
+      <!-- Card stats -->
+    </base-header>
+    <div class="container-fluid mt--7">
+      <div class="card">
+        <div class="card-header">Instalaciones</div>
+        <div class="card-body">
+          <div class="container">
+            <tr class="table table-hover border rounded">
+              <thead class="bg-pepsi-primary text-white">
+                <tr>
+                  <th scope="col">TV</th>
+                  <th scope="col">VC 1P</th>
+                  <th scope="col">VC 2P</th>
+                  <th scope="col">Enfriador 1T</th>
+                  <th scope="col">Enfriador 1T</th>
+                  <th scope="col">Enfriador 1T</th>
+                  <th scope="col">PassThrough</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(row, index) of items" :key="index">
+                  <th scope="row">
+                    <button class="btn btn-pepsi-tertiary btn-sm">{{row.tv}}</button>
+                  </th>
+                  <td>{{row.vc_1p}}</td>
+                  <td>{{row.vc_2p}}</td>
+                  <td>{{row.enfriador_1t}}</td>
+                  <td>{{row.enfriador_2t}}</td>
+                  <td>{{row.enfriador_3t}}</td>
+                  <td>{{row.passthrough}}</td>
+                  <td scope="row">{{sum(row)}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Totales</th>
+                  <td>{{ totally.vc_1p }}</td>
+                  <td>{{ totally.vc_2p }}</td>
+                  <td>{{ totally.enfriador_1t }}</td>
+                  <td>{{ totally.enfriador_2t }}</td>
+                  <td>{{ totally.enfriador_3t }}</td>
+                  <td>{{ totally.passthrough }}</td>
+                  <td>{{ sum(totally) }}</td>
+                </tr>
+              </tbody>
+            </tr>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -117,6 +66,7 @@ import roles from "../../constants/rolesConstants";
 
 export default {
   data: () => ({
+    data: [],
     search: "",
     headers: [
       {
@@ -252,7 +202,8 @@ export default {
           parseInt(this.totals.enfriador_2t) + parseInt(item.enfriador_2t);
         this.totals.enfriador_3t =
           parseInt(this.totals.enfriador_3t) + parseInt(item.enfriador_3t);
-        this.totals.passthrough = parseInt(this.totals.passthrough)+parseInt(item.passthrough);
+        this.totals.passthrough =
+          parseInt(this.totals.passthrough) + parseInt(item.passthrough);
       });
       return this.totals;
     }
@@ -301,14 +252,36 @@ export default {
         parseInt(numbers.passthrough)
       );
     },
-    initTotals(){
-        this.totals.vc_1p = 0
-        this.totals.vc_2p = 0
-        this.totals.enfriador_1t = 0
-        this.totals.enfriador_2t = 0
-        this.totals.enfriador_3t = 0
-        this.totals.passthrough =  0
+    initTotals() {
+      this.totals.vc_1p = 0;
+      this.totals.vc_2p = 0;
+      this.totals.enfriador_1t = 0;
+      this.totals.enfriador_2t = 0;
+      this.totals.enfriador_3t = 0;
+      this.totals.passthrough = 0;
+    },
+    onCreate() {
+      this.data.push({
+        content: "new created",
+        flow_no: "FW201601010003" + Math.floor(Math.random() * 100),
+        flow_type: "Help",
+        flow_type_code: "help"
+      });
+    },
+    onCreate100() {
+      [...new Array(100)].map(_ => {
+        this.onCreate();
+      });
+    },
+    handleSelectionChange(val) {
+      this.selectedRow = val;
+    },
+    handleCurrentChange(currentRow) {
+      console.log(currentRow);
     }
+  },
+  mounted() {
+    this.$loading(false);
   }
 };
 </script>

@@ -20,9 +20,6 @@ const router = new Router({
         {
           path: '/dashboard',
           name: 'dashboard',
-          // route level code-splitting
-          // this generates a separate chunk (about.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
           component: () => import(/* webpackChunkName: "demo" */ '../views/Dashboard.vue')
         },
         {
@@ -33,7 +30,7 @@ const router = new Router({
         {
           path: '/profile',
           name: 'profile',
-          component: () => import(/* webpackChunkName: "demo" */ '../views/UserProfile.vue')
+          component: () => import(/* webpackChunkName: "demo" */ '../views/users/Profile.vue')
         },
         {
           path: '/maps',
@@ -46,6 +43,11 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "demo" */ '../views/Tables.vue')
         }
       ]
+    },
+    {
+      path: '/profile',
+      name: 'Perfil de Usuario',
+      component:  () => import(/* webpackChunkName: "demo" */ '../views/users/Profile.vue'),
     },
     {
       path: '/',
@@ -144,6 +146,100 @@ const router = new Router({
           path: 'config',
           name: 'Importador de Atencion al cliente',
           component: () => import('./../views/admin/Configurations.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/desicion_matrix',
+          name: 'Matriz de Decisión',
+          component: () => import('./../views/admin/DesicionMatrix.vue'), meta: { requiresAuth: true }
+        },
+      ]
+    },
+    {
+      path: '/user',
+      name: 'Admin Dashboard',
+      redirect: 'login',
+      component: DashboardLayout,
+      children: [
+        { path: 'dashboard', name: 'Dashboard', component: () => import('@/views/Dashboard.vue'),
+        meta: { requiresAuth: true }},
+        // { path: 'detail', component: () => import('./../components/core/View.vue'), meta: { requiresAuth: true } },
+        // { path: 'confirm', component: () => import('./../components/core/View.vue'), meta: { requiresAuth: true } },
+        {
+          path: 'user-profile',
+          name: 'User Profile',
+          component: () => import('./../views/UserProfile.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'import-data',
+          name: 'Importadores',
+          component: () => import('./../views/admin/ImportData.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'user-list',
+          name: 'Usuarios en el sistema',
+          component: () => import('./../views/admin/UserList.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'instalations',
+          name: 'Instalaciones Semanales',
+          component: () => import('./../views/admin/Instalations.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'kit-report',
+          name: 'Importador de Equipos',
+          component: () => import('./../views/imports/KitReports.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'kit-detail-import',
+          name: 'Importador de Historial de Equipos',
+          component: () => import('./../views/imports/KitDetailsImport.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'call-center-import',
+          name: 'Importador de Atencion al cliente',
+          component: () => import('./../views/imports/CallCenterImport.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports',
+          name: 'Reportes avanzados',
+          component: () => import('./../views/admin/Reports.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/call-center',
+          name: 'Reporte de Call Center por Usuario',
+          component: () => import('./../views/reports/ReportCallCenter.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/kit-details',
+          name: 'Reporte de Detalle de Equipos',
+          component: () => import('./../views/reports/KitDetailsReport.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/general_indicators',
+          name: 'Indicadores generales',
+          component: () => import('./../views/reports/KitReport.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/expired_orders',
+          name: 'Indicadores generales',
+          component: () => import('./../views/reports/ExpireOrders.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/detail_orders',
+          name: 'Indicadores generales',
+          component: () => import('./../views/reports/DetailsOrders.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'config',
+          name: 'Importador de Atencion al cliente',
+          component: () => import('./../views/admin/Configurations.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'import-data',
+          name: 'Importadores',
+          component: () => import('./../views/admin/ImportData.vue'),
+          meta: { requiresAuth: true }
         },
       ]
     }

@@ -8,27 +8,45 @@
       </div>
       <form action>
         <div class="row justify-content-start">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-group">
-              <label for="user_id" class="text-white">Mes:</label>
+              <label for="motnh" class="text-white">Mes:</label>
               <select name="month" id="month" class="form-control" v-model="month">
                 <option value selected>Seleccione un mes.</option>
-                <option v-bind:key="index" v-for="(item, index) in months" :value="item">{{item}}</option>
+                <option
+                  v-bind:key="index"
+                  v-for="(item, index) of sites"
+                  :value="item.month"
+                >{{item.month}}</option>
               </select>
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-group">
               <label for="site" class="text-white">Zona:</label>
               <select name="site" id="site" class="form-control" v-model="site">
                 <option value selected>Seleccione una zona.</option>
-                <option v-bind:key="index" v-for="(t, index) in sites" :value="t">{{t}}</option>
+                <option v-bind:key="index" v-for="(t, index) of months" :value="t.site">{{t.site}}</option>
               </select>
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="status" class="text-white">Estado:</label>
+              <select name="status" id="status" class="form-control" v-model="status">
+                <option value selected>Seleccione una zona.</option>
+                <option
+                  v-bind:key="index"
+                  v-for="(t, index) of stat"
+                  :value="t.user_status"
+                >{{t.user_status}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-3">
             <div class="form-group">
               <div class="d-flex align-items-end mt-2">
                 <div>
@@ -46,7 +64,10 @@
           </div>
         </div>
       </form>
-      <!-- chart de llamadas -->
+    </base-header>
+
+    <!-- chart de llamadas -->
+    <div class="container-fluid mt--7">
       <div class="row mb-4" v-if="loaded">
         <div class="col-md-6 mb-5 mb-xl-0">
           <card type="default" header-classes="bg-transparent">
@@ -171,7 +192,7 @@
           </card>
         </div>
       </div>
-    </base-header>
+    </div>
   </div>
 </template>
 <script>
@@ -179,6 +200,7 @@ import reportServices from "./../../services/reportServices";
 
 import * as chartConfigs from "@/components/Charts/config";
 import PieChart from "@/components/Charts/PieChart";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -186,6 +208,14 @@ export default {
   },
   mounted() {
     this.$loading(false);
+  },
+  computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
   },
   data() {
     return {
@@ -252,31 +282,11 @@ export default {
       month: "",
       from_date: "",
       to_date: "",
-      months: [
-        "Enero",
-        "Febrero",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre"
-      ],
-      sites: [
-        "ADC",
-        "Centro Llanos",
-        "Oriente Norte",
-        "Centro Occidente",
-        "Metropolitano",
-        "Andes",
-        "Occidente",
-        "Oriente Sur"
-      ],
+      months: [],
+      sites: [],
       site: "",
+      status: "",
+      stat: [],
       data_by_month: [],
       data_by_sites: [],
       data_by_status: [],
@@ -287,10 +297,17 @@ export default {
     console.log("start");
     this.init();
   },
-  computed: {},
+  computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
+  },
   methods: {
     async show_charts() {
-      console.log("pass");
+      this.$loading(true);
       this.loaded = false;
 
       let response = await this.getData();
@@ -330,16 +347,18 @@ export default {
 
       this.loaded = true;
 
-      this.$toasted.show(response.message, {
-        theme: "bubble",
-        position: "top-right",
-        duration: 5000
-      });
+      this.$loading(false);
     },
     getData() {
       return new Promise((resolve, reject) => {
         reportServices
-          .get_KitDetailData({ month: this.month, site: this.site })
+          .get_KitDetailData({
+            month: this.month,
+            site: this.site,
+            status: this.status,
+            user_id: this.user.id,
+            role_id: this.user.role_id
+          })
           .then(response => {
             console.log(response);
             resolve(response);
@@ -350,10 +369,47 @@ export default {
           });
       });
     },
+    getSites() {
+      return new Promise((resolve, reject) => {
+        reportServices
+          .getSites()
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    },
+    getMonths() {
+      return new Promise((resolve, reject) => {
+        reportServices
+          .getMonths()
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    },
+    getStatus() {
+      return new Promise((resolve, reject) => {
+        reportServices
+          .getStatus()
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    },
     async init() {
-      let temp = await this.getUsers();
-      console.log(temp);
-      this.users = temp.data;
+      this.initData();
     },
     getRandomColor() {
       var letters = "0123456789ABCDEF";
@@ -362,6 +418,22 @@ export default {
         color += letters[Math.floor(Math.random() * 16)];
       }
       return color;
+    },
+    async initData() {
+      this.$loading(true);
+      let a = await this.getSites();
+      this.sites = a.data;
+      console.log(this.sites);
+
+      let b = await this.getMonths();
+      this.months = b.data;
+      console.log(this.months);
+
+      let c = await this.getStatus();
+      this.stat = c.data;
+      console.log(this.stat);
+
+      this.$loading(false);
     }
   }
 };

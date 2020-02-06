@@ -210,18 +210,24 @@
 </template>
 <script>
 import reportServices from "./../../services/reportServices";
-import userServices from "./../../services/userServices";
 
-import * as chartConfigs from "@/components/Charts/config";
 import LineChart from "@/components/Charts/LineChart";
-import BarChart from "@/components/Charts/BarChart";
 import PieChart from "@/components/Charts/PieChart";
+
+import { mapState } from "vuex";
 
 export default {
   components: {
     LineChart,
-    BarChart,
     PieChart
+  },
+  computed: {
+    ...mapState("userData", [
+      "user",
+      "user_logged",
+      "access_token",
+      "user_route"
+    ])
   },
   mounted() {
     this.$loading(false);
@@ -290,7 +296,7 @@ export default {
             }
           ]
         },
-        extraOptions: chartConfigs.blueChartOptions
+        extraOptions: []
       },
       loaded: false,
       site: "",
@@ -304,20 +310,15 @@ export default {
     };
   },
   created() {
-    console.log("start");
     this.init();
   },
-  computed: {},
   methods: {
     complete(index) {
       this.list[index] = !this.list[index];
     },
     async show_alert() {
-      console.log("pass");
       this.loaded = false;
-
       let response = await this.getData();
-
       this.dataOrderClass = response.data_order_class;
       this.dataStatus = response.data_status;
       this.dataCancelled = response.data_cancelled;
@@ -430,14 +431,14 @@ export default {
           .get_GeneralIndicators({
             site: this.site,
             from_date: this.from_date,
-            to_date: this.to_date
+            to_date: this.to_date,
+            user_id: this.user.id,
+            role_id: this.user.role_id
           })
           .then(response => {
-            console.log(response);
             resolve(response);
           })
           .catch(err => {
-            console.log(err);
             reject(err);
           });
       });
@@ -447,11 +448,9 @@ export default {
         reportServices
           .getZones()
           .then(response => {
-            console.log(response);
             resolve(response);
           })
           .catch(err => {
-            console.log(err);
             reject(err);
           });
       });

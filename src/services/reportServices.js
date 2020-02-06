@@ -25,10 +25,11 @@ const reportServices = {
       headers:{'Content-Type':'application/json'}
     });
   },
-  get_ExpiredOrders() {
+  get_ExpiredOrders(data) {
     return request({
       url: `/reports/expired_orders`,
       method: 'post',
+      data: data,
       headers:{'Content-Type':'application/json'}
     });
   },
@@ -43,6 +44,27 @@ const reportServices = {
   getZones() {
     return request({
       url: `/reports/zones`,
+      method: 'post',
+      headers:{'Content-Type':'application/json'}
+    });
+  },
+  getSites(){
+    return request({
+      url: `/reports/sites`,
+      method: 'post',
+      headers:{'Content-Type':'application/json'}
+    });
+  },
+  getStatus(){
+    return request({
+      url: `/reports/status`,
+      method: 'post',
+      headers:{'Content-Type':'application/json'}
+    });
+  },
+  getMonths(){
+    return request({
+      url: `/reports/months`,
       method: 'post',
       headers:{'Content-Type':'application/json'}
     });

@@ -17,16 +17,16 @@
         </template>
 
         <template slot-scope="{row}">
-          <th scope="row">{{row.names}}</th>
+          <th scope="row" class="mw-100">{{row.names}}</th>
           <td>{{row.cant}}</td>
           <td>
             <div class="d-flex align-items-center">
-              <span class="mr-2">{{row-cant}}</span>
+              <span class="mr-2">{{((row.cant/90)*100).toFixed(2)}}%</span>
               <base-progress
                 type="gradient-success"
                 class="pt-0"
                 :show-percentage="false"
-                :value="(parseInt(row.cant)/1000)*100"
+                :value="(row.cant/90)*100"
               />
             </div>
           </td>
