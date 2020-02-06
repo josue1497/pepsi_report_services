@@ -85,7 +85,7 @@
           data-dismiss="modal"
           aria-label="Close"
         >
-          <span :aria-hidden="!show">×</span>
+          <span >×</span>
         </button>
       </template>
       <template slot="modal-body">
