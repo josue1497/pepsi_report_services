@@ -39,6 +39,13 @@ const userServices = {
       headers:{'Content-Type':'application/json'}
     });
   },
+  resetPassword(data){
+    return request({
+      url: `/user/reset_pass?user_id=${data.user_id}&new_pass=${data.new_pass}`,
+      method: 'post',
+      headers:{'Content-Type':'application/json'}
+    });
+  },
 };
 
 export default userServices;

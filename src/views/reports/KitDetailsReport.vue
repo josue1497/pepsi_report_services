@@ -15,7 +15,7 @@
                 <option value selected>Seleccione un mes.</option>
                 <option
                   v-bind:key="index"
-                  v-for="(item, index) of sites"
+                  v-for="(item, index) of months"
                   :value="item.month"
                 >{{item.month}}</option>
               </select>
@@ -27,7 +27,7 @@
               <label for="site" class="text-white">Zona:</label>
               <select name="site" id="site" class="form-control" v-model="site">
                 <option value selected>Seleccione una zona.</option>
-                <option v-bind:key="index" v-for="(t, index) of months" :value="t.site">{{t.site}}</option>
+                <option v-bind:key="index" v-for="(t, index) of sites" :value="t.site">{{t.site}}</option>
               </select>
             </div>
           </div>

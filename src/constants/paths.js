@@ -21,7 +21,7 @@ const route = {
       text: 'Instalaciones'
     },
     {
-      to: '/user/desicion_matrix',
+      to: '/admin/desicion_matrix',
       icon: 'ni ni-archive-2 text-pepsi-primary',
       text: 'Matriz de Decisión'
     },

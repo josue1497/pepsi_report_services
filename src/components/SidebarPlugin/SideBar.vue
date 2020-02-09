@@ -6,7 +6,7 @@
             <navbar-toggle-button @click.native="showSidebar">
                 <span class="navbar-toggler-icon"></span>
             </navbar-toggle-button>
-            <router-link class="navbar-brand" to="/">
+            <router-link class="navbar-brand" to="#">
               <div class="d-flex w-100 justify-content-center align-items-center">
                   <img :src="logo" class="navbar-brand-img" alt="Logo Imagen">
                   <!-- <span class="justify-content-center align-items-center">Pepsi CO</span> -->

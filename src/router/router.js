@@ -47,7 +47,7 @@ const router = new Router({
     {
       path: '/profile',
       name: 'Perfil de Usuario',
-      component:  () => import(/* webpackChunkName: "demo" */ '../views/users/Profile.vue'),
+      component: () => import(/* webpackChunkName: "demo" */ '../views/users/Profile.vue'),
     },
     {
       path: '/',
@@ -72,8 +72,10 @@ const router = new Router({
       redirect: 'login',
       component: DashboardLayout,
       children: [
-        { path: 'dashboard', name: 'Dashboard', component: () => import('@/views/Dashboard.vue'),
-        meta: { requiresAuth: true }},
+        {
+          path: 'dashboard', name: 'Dashboard', component: () => import('@/views/Dashboard.vue'),
+          meta: { requiresAuth: true }
+        },
         // { path: 'detail', component: () => import('./../components/core/View.vue'), meta: { requiresAuth: true } },
         // { path: 'confirm', component: () => import('./../components/core/View.vue'), meta: { requiresAuth: true } },
         {
@@ -96,6 +98,11 @@ const router = new Router({
           path: 'instalations',
           name: 'Instalaciones Semanales',
           component: () => import('./../views/admin/Instalations.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'desicion_matrix',
+          name: 'Matriz de Decisión',
+          component: () => import('./../views/admin/DesicionMatrix.vue'), meta: { requiresAuth: true }
         },
         {
           path: 'kit-report',
@@ -141,6 +148,16 @@ const router = new Router({
           path: 'reports/detail_orders',
           name: 'Indicadores generales',
           component: () => import('./../views/reports/DetailsOrders.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/pto_details_orders',
+          name: 'Reporte por Puesto de Trabajo Responsable',
+          component: () => import('./../views/reports/PtoTrabReport.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/report_by_user',
+          name: 'Reportes Por Usuario',
+          component: () => import('./../views/reports/ReportByUser.vue'), meta: { requiresAuth: true }
         },
         {
           path: 'config',
@@ -160,8 +177,10 @@ const router = new Router({
       redirect: 'login',
       component: DashboardLayout,
       children: [
-        { path: 'dashboard', name: 'Dashboard', component: () => import('@/views/Dashboard.vue'),
-        meta: { requiresAuth: true }},
+        {
+          path: 'dashboard', name: 'Dashboard', component: () => import('@/views/Dashboard.vue'),
+          meta: { requiresAuth: true }
+        },
         // { path: 'detail', component: () => import('./../components/core/View.vue'), meta: { requiresAuth: true } },
         // { path: 'confirm', component: () => import('./../components/core/View.vue'), meta: { requiresAuth: true } },
         {
@@ -222,13 +241,23 @@ const router = new Router({
         },
         {
           path: 'reports/expired_orders',
-          name: 'Indicadores generales',
+          name: 'Ordenes Vencidas sin Atender',
           component: () => import('./../views/reports/ExpireOrders.vue'), meta: { requiresAuth: true }
         },
         {
           path: 'reports/detail_orders',
-          name: 'Indicadores generales',
+          name: 'Detalles de Ordenes',
           component: () => import('./../views/reports/DetailsOrders.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/pto_details_orders',
+          name: 'Reporte por Puesto de Trabajo Responsable',
+          component: () => import('./../views/reports/PtoTrabReport.vue'), meta: { requiresAuth: true }
+        },
+        {
+          path: 'reports/report_by_user',
+          name: 'Reportes Por Usuario',
+          component: () => import('./../views/reports/ReportByUser.vue'), meta: { requiresAuth: true }
         },
         {
           path: 'config',

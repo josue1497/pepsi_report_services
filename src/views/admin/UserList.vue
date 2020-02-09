@@ -85,7 +85,7 @@
           data-dismiss="modal"
           aria-label="Close"
         >
-          <span >×</span>
+          <span>×</span>
         </button>
       </template>
       <template slot="modal-body">
@@ -151,6 +151,7 @@
                 class="form-control"
                 placeholder="Contraseña:"
                 v-model="editedItem.password"
+                disabled="true"
               />
             </div>
           </div>
@@ -159,6 +160,7 @@
       <template slot="footer">
         <div class="d-flex align-content-center">
           <button class="btn btn-pepsi-tertiary" @click="close">Cancelar</button>
+          <button class="btn btn-warning" v-if="!new_user"  @click="reset">Restablecer Contraseña</button>
           <button class="btn btn-pepsi-primary" v-if="new_user" @click="create">Crear</button>
           <button class="btn btn-pepsi-primary" v-if="!new_user" @click="save">Guardar</button>
         </div>
@@ -340,6 +342,34 @@ export default {
     close() {
       this.editedItem = Object.assign({}, this.defaultItem);
       this.dialog = false;
+    },
+    async reset() {
+      this.$loading(true);
+
+      let response = await this.resetPass({
+        user_id: this.editedItem.id,
+        new_pass: "12345"
+      });
+      if (response.status === 200) {
+        this.$vToastify.success(response.message, "Operación Exitosa.");
+      } else {
+        this.$vToastify.error(response.message, "Error:");
+      }
+      this.init();
+      this.close();
+      this.$loading(false);
+    },
+    resetPass(data) {
+      return new Promise((resolve, reject) => {
+        userServices
+          .resetPassword(data)
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
     pushUser(data, user_id) {
       return new Promise((resolve, reject) => {

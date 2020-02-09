@@ -76,6 +76,22 @@ const reportServices = {
       data: data,
       headers:{'Content-Type':'application/json'}
     });
+  },
+  getReportUser(data) {
+    return request({
+      url: `/reports/report_by_user`,
+      method: 'post',
+      data: data,
+      headers:{'Content-Type':'application/json'}
+    });
+  },
+  getByPtoJob(data) {
+    return request({
+      url: `/reports/get_pto_job`,
+      method: 'post',
+      data: data,
+      headers:{'Content-Type':'application/json'}
+    });
   }
 };
 

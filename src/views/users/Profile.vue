@@ -117,7 +117,7 @@
     <modal :show="dialog" :showClose="true">
       <template slot="header">
         <div class="d-flex align-content-center">
-          <h3>Cambiar Contraseña::</h3>
+          <h3>Cambiar Contraseña:</h3>
         </div>
       </template>
       <template slot="close-button">

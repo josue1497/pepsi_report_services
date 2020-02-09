@@ -90,7 +90,6 @@
               :height="350"
               ref="bigChart"
               :chart-data="bigLineChart.chartData"
-              :extra-options="bigLineChart.extraOptions"
             ></line-chart>
           </card>
         </div>
@@ -139,7 +138,10 @@ import SocialTrafficTable from "./Dashboard/SocialTrafficTable";
 import PageVisitsTable from "./Dashboard/PageVisitsTable";
 
 import reportServices from "./../services/reportServices";
+import configurationService from "../services/configurationServices";
+
 import { mapGetters, mapActions, mapState } from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
   components: {
@@ -164,28 +166,19 @@ export default {
           datasets: [
             {
               label: "Ordenes Atendidas",
-              data: []
+              data: [],
+              borderColor: [],
+            },
+            {
+              label: "Meta",
+              data: [],
+              borderColor: [],
             }
           ],
           labels: []
         },
         extraOptions: [],
-        annotation: {
-          annotations: [
-            {
-              type: "line",
-              mode: "horizontal",
-              scaleID: "y-axis-0",
-              value: 5,
-              borderColor: "rgb(75, 192, 192)",
-              borderWidth: 4,
-              label: {
-                enabled: false,
-                content: "Test label"
-              }
-            }
-          ]
-        }
+        annotation: {}
       },
       redBarChart: {
         chartData: {
@@ -231,10 +224,13 @@ export default {
       total_orders_a_last: 0,
       order_a_current: false,
 
-      loaded: false
+      loaded: false,
+      goal_calls: 0,
+      goal_orders: 0
     };
   },
   methods: {
+    ...mapMutations("app", ["set_goals"]),
     initBigChart(index) {
       let chartData = {
         datasets: [
@@ -266,11 +262,26 @@ export default {
           });
       });
     },
+    getAll() {
+      return new Promise((resolve, reject) => {
+        configurationService
+          .getAll()
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
     async processData() {
       this.$loading(true);
       this.loaded = false;
       console.log(this.user);
-      let response = await this.getData({user_id: this.user.id, role_id: this.user.role_id});
+      let response = await this.getData({
+        user_id: this.user.id,
+        role_id: this.user.role_id
+      });
       console.log(response);
 
       this.data_total_calls_m = response.data_call_manage;
@@ -328,8 +339,15 @@ export default {
       this.data_orders_by_dates = response.data_order_by_date;
 
       for (let item of this.data_orders_by_dates) {
-        this.bigLineChart.chartData.datasets[0].data.push(item.cant);
         this.bigLineChart.chartData.labels.push(item.entry_date);
+
+        this.bigLineChart.chartData.datasets[0].data.push(item.cant);
+        this.bigLineChart.chartData.datasets[0].borderColor.push("#e42934");
+
+        this.bigLineChart.chartData.datasets[1].data.push(this.goal_orders);
+        this.bigLineChart.chartData.datasets[1].borderColor.push("#000e93");
+        
+
       }
 
       for (let item of this.data_calls_by_dates) {
@@ -337,7 +355,7 @@ export default {
         this.redBarChart.chartData.datasets[0].borderColor.push("#000e93");
         this.redBarChart.chartData.datasets[0].backgroundColor.push("#000e93");
 
-        this.redBarChart.chartData.datasets[1].data.push(90);
+        this.redBarChart.chartData.datasets[1].data.push(this.goal_calls);
         this.redBarChart.chartData.datasets[1].borderColor.push("#e42934");
         this.redBarChart.chartData.datasets[1].backgroundColor.push("#e42934");
 
@@ -346,9 +364,45 @@ export default {
 
       this.loaded = true;
       this.$loading(false);
+    },
+    getAllConfs() {
+      return new Promise((resolve, reject) => {
+        configurationService
+          .getAll()
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    async matchingConfigs() {
+      this.$loading(true);
+
+      let response = await this.getAllConfs();
+      console.log(response);
+      let goalCall = response.data.find(
+        element => element.name === "goal_calls"
+      );
+
+      if (goalCall) {
+        this.goal_calls = goalCall.value;
+      }
+
+      let goalOrders = response.data.find(
+        element => element.name === "goal_orders"
+      );
+
+      if (goalOrders) {
+        this.goal_orders = goalOrders.value;
+      }
+
+      this.$loading(false);
     }
   },
   mounted() {
+    this.matchingConfigs();
     this.processData();
   }
 };

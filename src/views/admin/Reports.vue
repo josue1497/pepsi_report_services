@@ -5,7 +5,7 @@
       <div class="row justify-content-start">
         <div class="col-md-3 mx-3 my-2">
           <div class="card ">
-            <img  style="height: 150px;" src="https://cdn.emprender-facil.com/wp-content/uploads/2019/08/call-center.jpg" class="card-img-top" alt="Call center Report image" />
+            <img  style="height: 150px;" src="https://image.shutterstock.com/image-photo/businessman-working-data-document-graph-260nw-1194925342.jpg" class="card-img-top" alt="Call center Report image" />
             <div class="card-body">
               <h5 class="card-title text-center">Call Center</h5>
               <p
@@ -17,7 +17,7 @@
         </div>
         <div class="col-md-3 mx-3 my-2">
           <div class="card ">
-            <img style="height: 150px;" src="https://sc01.alicdn.com/kf/HTB1d3xSg7zoK1RjSZFlq6yi4VXaz/Promotional-660L-Pepsi-Refrigerator-for-Beverage.jpg_350x350.jpg" class="card-img-top" alt="Call center Report image" />
+            <img style="height: 150px;" src="https://image.shutterstock.com/image-photo/businessman-working-data-document-graph-260nw-1194925342.jpg" class="card-img-top" alt="Call center Report image" />
             <div class="card-body">
               <h5 class="card-title text-center">Indocadores Generales</h5>
               <p
@@ -30,7 +30,7 @@
 
         <div class="col-md-3 mx-3 my-2">
           <div class="card ">
-            <img style="height: 150px;" src="https://aceairandappliances.com/wp-content/uploads/2019/01/pepsi-cooler-repair-min-300x216.jpg" class="card-img-top" alt="Call center Report image" />
+            <img style="height: 150px;" src="https://image.shutterstock.com/image-photo/businessman-working-data-document-graph-260nw-1194925342.jpg" class="card-img-top" alt="Call center Report image" />
             <div class="card-body">
               <h5 class="card-title text-center">Detalle de Equipos.</h5>
               <p
@@ -42,7 +42,7 @@
         </div>
         <div class="col-md-3 mx-3 my-2">
           <div class="card ">
-            <img style="height: 150px;" src="https://aceairandappliances.com/wp-content/uploads/2019/01/pepsi-cooler-repair-min-300x216.jpg" class="card-img-top" alt="Call center Report image" />
+            <img style="height: 150px;" src="https://image.shutterstock.com/image-photo/businessman-working-data-document-graph-260nw-1194925342.jpg" class="card-img-top" alt="Call center Report image" />
             <div class="card-body">
               <h5 class="card-title text-center">Vista de Ordenes no atendidas.</h5>
               <p
@@ -55,13 +55,37 @@
 
         <div class="col-md-3 mx-3 my-2">
           <div class="card ">
-            <img style="height: 150px;" src="https://aceairandappliances.com/wp-content/uploads/2019/01/pepsi-cooler-repair-min-300x216.jpg" class="card-img-top" alt="Call center Report image" />
+            <img style="height: 150px;" src="https://image.shutterstock.com/image-photo/businessman-working-data-document-graph-260nw-1194925342.jpg" class="card-img-top" alt="Call center Report image" />
             <div class="card-body">
               <h5 class="card-title text-center">Detalle Ordenes de Instalacion.</h5>
               <p
                 class="card-text text-justify"
               >Un grafico donde se puede ver mas graficamente el movimiento de los ZPMI.</p>
               <router-link to="/admin/reports/detail_orders" class="btn btn-pepsi-primary">Ver. <i class="ni ni-curved-next"></i> </router-link>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mx-3 my-2">
+          <div class="card ">
+            <img style="height: 150px;" src="https://image.shutterstock.com/image-photo/businessman-working-data-document-graph-260nw-1194925342.jpg" class="card-img-top" alt="Call center Report image" />
+            <div class="card-body">
+              <h5 class="card-title text-center">Reportes por Operador.</h5>
+              <p
+                class="card-text text-justify"
+              >Una serie de graficos que mostraran el estatus de los diferentes operadores</p>
+              <router-link to="/admin/reports/report_by_user" class="btn btn-pepsi-primary">Ver. <i class="ni ni-curved-next"></i> </router-link>
+            </div>
+          </div>
+        </div>
+         <div class="col-md-3 mx-3 my-2">
+          <div class="card ">
+            <img style="height: 150px;" src="https://image.shutterstock.com/image-photo/businessman-working-data-document-graph-260nw-1194925342.jpg" class="card-img-top" alt="Call center Report image" />
+            <div class="card-body">
+              <h5 class="card-title text-center">Puesto de Trabajo Responsables</h5>
+              <p
+                class="card-text text-justify"
+              >Una serie de graficos que mostraran el rendimiento de los distintos Puestos de trabajos en las diferentes zonas</p>
+              <router-link to="/admin/reports/pto_details_orders" class="btn btn-pepsi-primary">Ver. <i class="ni ni-curved-next"></i> </router-link>
             </div>
           </div>
         </div>

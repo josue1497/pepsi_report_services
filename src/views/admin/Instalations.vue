@@ -3,9 +3,14 @@
     <base-header type="gradient-blue" class="pb-6 pb-8 pt-5 pt-md-8">
       <!-- Card stats -->
     </base-header>
-    <div class="container-fluid mt--7">
+    <div class="container-fluid mt--7" v-show="loaded">
       <div class="card">
-        <div class="card-header">Instalaciones</div>
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <span>Instalaciones</span>
+            <button class="btn btn-pepsi-primary" @click="addZone">Añadir Zona</button>
+          </div>
+        </div>
         <div class="card-body">
           <div class="container">
             <tr class="table table-hover border rounded">
@@ -24,7 +29,7 @@
               <tbody>
                 <tr v-for="(row, index) of items" :key="index">
                   <th scope="row">
-                    <button class="btn btn-pepsi-tertiary btn-sm">{{row.tv}}</button>
+                    <button class="btn btn-pepsi-tertiary btn-sm" @click="edit(row)">{{row.zone}}</button>
                   </th>
                   <td>{{row.vc_1p}}</td>
                   <td>{{row.vc_2p}}</td>
@@ -50,6 +55,125 @@
         </div>
       </div>
     </div>
+    <modal :show="dialog" :showClose="true">
+      <template slot="header">
+        <div class="d-flex align-content-center">
+          <h3>Instalación</h3>
+        </div>
+      </template>
+      <template slot="close-button">
+        <button
+          type="button"
+          class="close"
+          v-if="true"
+          @click="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span :aria-hidden="!show">×</span>
+        </button>
+      </template>
+      <template slot="modal-body">
+        <div>
+          <div class="row my-2">
+            <div class="col">
+              <label for>VC 1P</label>
+              <input
+                type="text"
+                class="form-control"
+                id="vc_1p"
+                name="vc_1p"
+                v-model="editedItem.vc_1p"
+              />
+            </div>
+            <div class="col">
+              <label for>VC 2P</label>
+              <input
+                type="text"
+                class="form-control"
+                id="vc_2p"
+                name="vc_2p"
+                v-model="editedItem.vc_2p"
+              />
+            </div>
+          </div>
+          <div class="row my-2">
+            <div class="col">
+              <label for>Enfriador 1T</label>
+              <input
+                type="text"
+                class="form-control"
+                id="enfriador_1t"
+                name="enfriador_1t"
+                v-model="editedItem.enfriador_1t"
+              />
+            </div>
+            <div class="col">
+              <label for>Enfriador 2T</label>
+              <input
+                type="text"
+                class="form-control"
+                id="enfriador_2t"
+                name="enfriador_2t"
+                v-model="editedItem.enfriador_2t"
+              />
+            </div>
+          </div>
+          <div class="row my-2">
+            <div class="col">
+              <label for>Enfriador 3T</label>
+              <input
+                type="text"
+                class="form-control"
+                id="enfriador_3t"
+                name="enfriador_1t"
+                v-model="editedItem.enfriador_3t"
+              />
+            </div>
+            <div class="col">
+              <label for>Passthrough</label>
+              <input
+                type="text"
+                class="form-control"
+                id="passthrough"
+                name="passthrough"
+                v-model="editedItem.passthrough"
+              />
+            </div>
+          </div>
+          <div class="row my-2">
+            <div class="col">
+              <label for>Zona</label>
+              <input
+                type="text"
+                class="form-control"
+                id="zone"
+                name="zone"
+                :disabled="editedItem.id!==0"
+                v-model="editedItem.zone"
+              />
+            </div>
+          </div>
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="d-flex align-content-center">
+          <button class="btn btn-pepsi-tertiary" @click="close">Cancelar</button>
+          <button
+            class="btn btn-pepsi-primary"
+            v-show="editedItem.id===0"
+            id="create"
+            @click="saveOrUpdateInstalation('create')"
+          >Guardar</button>
+          <button
+            class="btn btn-pepsi-primary"
+            v-show="editedItem.id!==0"
+            id="update"
+            @click="saveOrUpdateInstalation('update')"
+          >Guardar</button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -63,119 +187,33 @@
 
 <script>
 import roles from "../../constants/rolesConstants";
+import instalationService from "./../../services/instalationsServices.js";
 
 export default {
   data: () => ({
     data: [],
     search: "",
-    headers: [
-      {
-        sortable: false,
-        text: "TV",
-        value: "tv"
-      },
-      {
-        sortable: true,
-        text: "VC 1P",
-        value: "vc_1p"
-      },
-      {
-        sortable: true,
-        text: "VC 2P",
-        value: "vc_2p"
-      },
-      {
-        sortable: true,
-        text: "Enfriador 1T",
-        value: "enfriador_1t"
-      },
-      {
-        sortable: true,
-        text: "Enfriador 2T",
-        value: "enfriador_2t"
-      },
-      {
-        sortable: true,
-        text: "Enfriador 3T",
-        value: "enfriador_3t"
-      },
-      {
-        sortable: true,
-        text: "PassThrough",
-        value: "passthrough"
-      },
-      {
-        sortable: true,
-        text: "Total",
-        value: "total"
-      }
-    ],
-    items: [
-      {
-        id: 1,
-        tv: "Centro",
-        vc_1p: 2,
-        vc_2p: 4,
-        enfriador_1t: 3,
-        enfriador_2t: 5,
-        enfriador_3t: 2,
-        passthrough: 7
-      },
-      {
-        id: 2,
-        tv: "Centro Occ",
-        vc_1p: 3,
-        vc_2p: 1,
-        enfriador_1t: 5,
-        enfriador_2t: 2,
-        enfriador_3t: 6,
-        passthrough: 1
-      },
-      {
-        id: 3,
-        tv: "Metropolitana",
-        vc_1p: 2,
-        vc_2p: 9,
-        enfriador_1t: 7,
-        enfriador_2t: 5,
-        enfriador_3t: 2,
-        passthrough: 7
-      },
-      {
-        id: 4,
-        tv: "Occidente",
-        vc_1p: 1,
-        vc_2p: 4,
-        enfriador_1t: 9,
-        enfriador_2t: 8,
-        enfriador_3t: 4,
-        passthrough: 3
-      },
-      {
-        id: 5,
-        tv: "Oriente",
-        vc_1p: 2,
-        vc_2p: 6,
-        enfriador_1t: 1,
-        enfriador_2t: 2,
-        enfriador_3t: 1,
-        passthrough: 7
-      }
-    ],
+    items: [],
     editedIndex: -1,
     editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      id: 0,
+      zone: "",
+      vc_1p: 0,
+      vc_2p: 0,
+      enfriador_1t: 0,
+      enfriador_2t: 0,
+      enfriador_3t: 0,
+      passthrough: 7
     },
     defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      id: 0,
+      zone: "",
+      vc_1p: 0,
+      vc_2p: 0,
+      enfriador_1t: 0,
+      enfriador_2t: 0,
+      enfriador_3t: 0,
+      passthrough: 0
     },
     dialog: false,
     roles: roles,
@@ -186,12 +224,11 @@ export default {
       enfriador_2t: 0,
       enfriador_3t: 0,
       passthrough: 0
-    }
+    },
+    dialog: false,
+    loaded: false
   }),
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "Nueva linea" : "Editar linea";
-    },
     totally() {
       Array.from(this.items).forEach(item => {
         this.totals.vc_1p = parseInt(this.totals.vc_1p) + parseInt(item.vc_1p);
@@ -217,35 +254,26 @@ export default {
     openDialog() {
       this.dialog = true;
     },
-    editItem(item) {
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+    addZone() {
+      console.log("add");
+      Object.assign(this.editedItem, this.defaultItem);
+      this.openDialog();
     },
-    deleteItem(item) {
-      const index = this.items.indexOf(item);
-      confirm("¿Seguro desea eliminar esta fila?") &&
-        this.desserts.splice(index, 1);
+    edit(item) {
+      console.log("edit");
+
+      Object.assign(this.editedItem, item);
+      this.openDialog();
     },
     close() {
+      this.initEditItem();
       this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
-    save() {
-      this.initTotals();
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
-      }
-      this.close();
     },
     sum(numbers) {
+      console.log(numbers);
       return (
         parseInt(numbers.vc_1p) +
+        parseInt(numbers.vc_2p) +
         parseInt(numbers.enfriador_1t) +
         parseInt(numbers.enfriador_2t) +
         parseInt(numbers.enfriador_3t) +
@@ -260,27 +288,82 @@ export default {
       this.totals.enfriador_3t = 0;
       this.totals.passthrough = 0;
     },
-    onCreate() {
-      this.data.push({
-        content: "new created",
-        flow_no: "FW201601010003" + Math.floor(Math.random() * 100),
-        flow_type: "Help",
-        flow_type_code: "help"
+    initEditItem() {
+      this.editedItem = Object.assign(this.editedItem, this.defaultItem);
+    },
+    async processInstalations() {
+      this.$loading(true);
+      this.loaded = false;
+      this.initTotals();
+      let response = await this.getAllInstalations();
+      console.log(response);
+      this.items = response.data;
+      this.loaded = true;
+      this.$loading(false);
+    },
+    async saveOrUpdateInstalation(action) {
+      this.$loading(true);
+      let response;
+      if ("update" === action) {
+        response = await this.updateInstalation(
+          this.editedItem,
+          this.editedItem.id
+        );
+        console.log(response);
+      }
+
+      if ("create" === action) {
+        response = await this.newInstalation(this.editedItem);
+        console.log(response);
+      }
+      if (response.status === 200) {
+        this.$vToastify.success("Operación realizada con Exito", "Exito");
+      } else {
+        this.$vToastify.error("Error al guardar los datos", "Error:");
+      }
+      this.close();
+      this.processInstalations();
+      this.$loading(false);
+    },
+    getAllInstalations() {
+      return new Promise((resolve, reject) => {
+        instalationService
+          .getAll()
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            reject(err);
+          });
       });
     },
-    onCreate100() {
-      [...new Array(100)].map(_ => {
-        this.onCreate();
+    newInstalation(data) {
+      return new Promise((resolve, reject) => {
+        instalationService
+          .saveInstalation(data)
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            reject(err);
+          });
       });
     },
-    handleSelectionChange(val) {
-      this.selectedRow = val;
-    },
-    handleCurrentChange(currentRow) {
-      console.log(currentRow);
+    updateInstalation(data, id) {
+      return new Promise((resolve, reject) => {
+        instalationService
+          .updateInstalation(data, id)
+          .then(response => {
+            resolve(response);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     }
   },
   mounted() {
+    this.processInstalations();
     this.$loading(false);
   }
 };
