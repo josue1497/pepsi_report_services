@@ -7,7 +7,7 @@
         </div>
       </div>
       <form action>
-        <div class="row justify-content-start">
+        <div class="row justify-content-start d-print-none">
           <div class="col-md-3">
             <div class="form-group">
               <label for="motnh" class="text-white">Mes:</label>
@@ -126,7 +126,7 @@
           </card>
         </div>
 
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">

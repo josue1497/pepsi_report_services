@@ -1,13 +1,13 @@
 <template>
   <div class="w-100">
     <base-header type="pepsi-primary" class="pb-6 pb-8 pt-5 pt-md-8">
-      <div class="row justify-content-start">
+      <div class="row justify-content-start d-print-none">
         <div class="col-md-12">
           <small class="text-white">Filtros:</small>
         </div>
       </div>
       <form action>
-        <div class="row justify-content-start">
+        <div class="row justify-content-start d-print-none">
           <div class="col-md-3">
             <div class="form-group">
               <label for="user_id" class="text-white">Zona:</label>
@@ -60,7 +60,7 @@
         </div>
       </form>
       <div class="row mb-4" v-if="loaded">
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 " id="recargo">
           <card type="default" header-classes="bg-transparent">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -70,7 +70,7 @@
             <pie-chart ref="barChart" :chart-data="charge_key_chart.chartData" v-if="loaded"></pie-chart>
           </card>
         </div>
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -95,7 +95,7 @@
       </div>
 
       <div class="row mb-4" v-if="loaded">
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 ">
           <card type="default" header-classes="bg-transparent">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -105,7 +105,7 @@
             <pie-chart ref="barChart" :chart-data="status_chart.chartData" v-if="loaded"></pie-chart>
           </card>
         </div>
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -140,7 +140,7 @@
             <line-chart ref="barChart" :chart-data="order_class_chart.chartData" v-if="loaded"></line-chart>
           </card>
         </div>
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -169,7 +169,7 @@
         </div>
       </div>
       <div class="row mb-4" v-if="loaded">
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="default" header-classes="bg-transparent">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -179,7 +179,7 @@
             <line-chart ref="barChart" :chart-data="chart_cancelled.chartData" v-if="loaded"></line-chart>
           </card>
         </div>
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -316,10 +316,18 @@ export default {
     complete(index) {
       this.list[index] = !this.list[index];
     },
+    imprSelec(nombre) {
+      var ficha = document.getElementById(nombre);
+      var ventimp = window.open(" ", "popimpr");
+      ventimp.document.write(ficha.innerHTML);
+      ventimp.document.close();
+      ventimp.print();
+      ventimp.close();
+    },
     async show_alert() {
       this.loaded = false;
       let response = await this.getData();
-      console.log(response)
+      console.log(response);
       this.dataOrderClass = response.data_order_class;
       this.dataStatus = response.data_status;
       this.dataCancelled = response.data_cancelled;

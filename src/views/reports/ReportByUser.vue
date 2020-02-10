@@ -7,7 +7,7 @@
         </div>
       </div>
       <form action>
-        <div class="row justify-content-start">
+        <div class="row justify-content-start d-print-none">
           <div class="col-md-3">
             <div class="form-group">
               <label for="user_id" class="text-white">Operador:</label>
@@ -71,7 +71,7 @@
             <bar-chart ref="doughnutChart" :chart-data="status.chartData" v-if="loaded"></bar-chart>
           </card>
         </div>
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -105,7 +105,7 @@
             <pie-chart ref="barChart" :chart-data="charge.chartData" v-if="loaded"></pie-chart>
           </card>
         </div>
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -140,7 +140,7 @@
             <pie-chart ref="barChart" :chart-data="zone.chartData" v-if="loaded"></pie-chart>
           </card>
         </div>
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">
@@ -182,7 +182,7 @@
             ></bar-chart>
           </card>
         </div>
-        <div class="col-md-6 mb-5 mb-xl-0">
+        <div class="col-md-6 mb-5 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">

@@ -6,7 +6,7 @@
           <h2 class="text-white">Ordenes de Instalacion (ZPMI).</h2>
         </div>
       </div>
-      <div class="row justify-content-start">
+      <div class="row justify-content-start d-print-none">
         <div class="col-md-12">
           <small class="text-white">Filtros:</small>
         </div>
@@ -78,7 +78,7 @@
             <pie-chart ref="barChart" :chart-data="chart.chartData" v-if="loaded"></pie-chart>
           </card>
         </div>
-        <div class="col-md-12 m-2 mb-xl-0">
+        <div class="col-md-12 m-2 mb-xl-0 d-print-none">
           <card type="ligth" header-classes="bg-transparent text-black">
             <div slot="header" class="row align-items-center">
               <div class="col">

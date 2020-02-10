@@ -1,7 +1,7 @@
 <template>
   <div class="w-100">
     <base-header type="pepsi-primary" class="pb-6 pb-8 pt-5 pt-md-8">
-      <div class="row justify-content-start">
+      <div class="row justify-content-start d-print-none">
         <div class="col-md-12">
           <small class="text-white">Filtros:</small>
         </div>
