@@ -288,9 +288,10 @@ export default {
       this.total_calls_current = this.data_total_calls_m[1]
         ? this.data_total_calls_m[1].cant
         : 0;
+      
       this.call_current =
         this.data_total_calls_m[0].cant > this.data_total_calls_m[1]
-          ? this.data_total_calls_m[1].cant
+          ? (this.data_total_calls_m[1])?this.data_total_calls_m[1].cant:0
           : 0;
       this.total_calls_last =
         this.data_total_calls_m[0].cant - this.data_total_calls_m[1]
